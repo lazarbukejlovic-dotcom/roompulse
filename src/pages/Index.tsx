@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Zap, LayoutDashboard, CheckCircle2, Users, ArrowRight, Star, Columns3, Shield, Sparkles, TrendingUp, Globe } from 'lucide-react';
+import { Zap, LayoutDashboard, CheckCircle2, Users, ArrowRight, Columns3, Shield, Sparkles, TrendingUp, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useRef } from 'react';
 
@@ -11,19 +11,6 @@ const features = [
   { icon: Shield, title: 'Secure by Default', desc: 'JWT authentication, protected routes, and encrypted storage from day one.' },
   { icon: LayoutDashboard, title: 'Live Dashboard', desc: 'Real-time stats, completion charts, and activity summaries at a glance.' },
   { icon: Sparkles, title: 'Premium Dark Mode', desc: 'A carefully crafted dark theme that looks stunning — not just inverted colors.' },
-];
-
-const testimonials = [
-  { name: 'Sarah Kim', role: 'Product Lead @ Vercel', text: 'RoomPulse replaced three tools for our team. The board UI is the best I\'ve used.', avatar: 'SK' },
-  { name: 'Marcus Chen', role: 'Freelance Developer', text: 'Finally a project board that feels like a real product. The drag-and-drop is perfect.', avatar: 'MC' },
-  { name: 'Priya Sharma', role: 'Design Director', text: 'My team adopted it in minutes. The dark mode is chef\'s kiss.', avatar: 'PS' },
-];
-
-const metrics = [
-  { value: '10k+', label: 'Tasks managed' },
-  { value: '2.5k', label: 'Active users' },
-  { value: '99.9%', label: 'Uptime' },
-  { value: '4.9★', label: 'User rating' },
 ];
 
 const fadeUp = { hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } };
@@ -71,7 +58,7 @@ export default function LandingPage() {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
               </span>
-              Now in public beta — free to use
+              Now available — free to use
             </motion.div>
             <motion.h1 variants={fadeUp} className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl xl:text-7xl leading-[1.1]">
               Ship projects with
@@ -184,28 +171,6 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      {/* Metrics */}
-      <section className="border-y border-border/50 bg-muted/20">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12">
-          <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
-            {metrics.map((m, i) => (
-              <motion.div
-                key={m.label}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={fadeUp}
-                transition={{ delay: i * 0.08 }}
-                className="text-center"
-              >
-                <p className="text-2xl sm:text-3xl font-extrabold tracking-tight">{m.value}</p>
-                <p className="text-xs sm:text-sm text-muted-foreground mt-1">{m.label}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Features */}
       <section className="mx-auto max-w-6xl px-4 sm:px-6 py-20 sm:py-28">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-16">
@@ -250,37 +215,6 @@ export default function LandingPage() {
                   <h3 className="text-lg font-bold">{s.title}</h3>
                 </div>
                 <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-20 sm:py-28">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-16">
-            <span className="text-xs font-semibold uppercase tracking-widest text-primary mb-3 block">Testimonials</span>
-            <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">Loved by makers & teams.</h2>
-          </motion.div>
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="grid gap-6 sm:grid-cols-3">
-            {testimonials.map((t) => (
-              <motion.div
-                key={t.name}
-                variants={fadeUp}
-                className="glass-card rounded-xl p-6 sm:p-7"
-              >
-                <div className="flex gap-1 mb-4">{[...Array(5)].map((_, j) => <Star key={j} className="h-4 w-4 fill-accent text-accent" />)}</div>
-                <p className="text-sm text-foreground/90 leading-relaxed mb-6">"{t.text}"</p>
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
-                    {t.avatar}
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold">{t.name}</p>
-                    <p className="text-xs text-muted-foreground">{t.role}</p>
-                  </div>
-                </div>
               </motion.div>
             ))}
           </motion.div>
@@ -340,7 +274,7 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="mt-10 pt-6 border-t border-border/40 flex flex-col sm:flex-row items-center justify-between gap-2">
-            <p className="text-xs text-muted-foreground">© 2024 RoomPulse. Built as a portfolio project by a senior developer.</p>
+            <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} RoomPulse. All rights reserved.</p>
             <p className="text-xs text-muted-foreground">Designed & engineered with care.</p>
           </div>
         </div>
