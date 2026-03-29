@@ -21,7 +21,7 @@
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
     --border: 214 20% 90%;
-    --input: 214 20% 90%;
+    --input: 214 20% 88%;
     --ring: 168 70% 38%;
     --radius: 0.625rem;
     --sidebar-background: 210 15% 96%;
@@ -61,7 +61,7 @@
     --destructive: 0 62% 40%;
     --destructive-foreground: 0 0% 100%;
     --border: 224 20% 18%;
-    --input: 224 20% 18%;
+    --input: 224 20% 20%;
     --ring: 168 70% 48%;
     --sidebar-background: 224 28% 9%;
     --sidebar-foreground: 210 20% 85%;
@@ -91,6 +91,10 @@
     @apply bg-background text-foreground antialiased;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   }
+  /* Better focus states for accessibility */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
 }
 
 @layer utilities {
@@ -106,5 +110,12 @@
   .scrollbar-thin {
     scrollbar-width: thin;
     scrollbar-color: hsl(var(--muted)) transparent;
+  }
+}
+
+/* Smooth page transitions */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
   }
 }
