@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { DragDropContext, Droppable, Draggable, type DropResult } from '@hello-pangea/dnd';
-import { motion } from 'framer-motion';
-import { Plus, ArrowLeft, Search, Filter, Calendar, Tag, MessageSquare, Clock, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Plus, ArrowLeft, Search, Filter, Calendar, Tag, MessageSquare, Clock, GripVertical, Inbox } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -19,7 +19,20 @@ import {
 } from '@/components/ui/alert-dialog';
 
 const STATUSES: TaskStatus[] = ['todo', 'in-progress', 'review', 'done'];
-const STATUS_DOT: Record<TaskStatus, string> = { todo: 'bg-status-todo', 'in-progress': 'bg-status-progress', review: 'bg-status-review', done: 'bg-status-done' };
+
+const STATUS_DOT_COLORS: Record<TaskStatus, string> = {
+  todo: 'bg-status-todo',
+  'in-progress': 'bg-status-progress',
+  review: 'bg-status-review',
+  done: 'bg-status-done',
+};
+
+const PRIORITY_BG: Record<TaskPriority, string> = {
+  low: 'bg-priority-low/10 text-priority-low',
+  medium: 'bg-priority-medium/10 text-priority-medium',
+  high: 'bg-priority-high/10 text-priority-high',
+  urgent: 'bg-priority-urgent/10 text-priority-urgent',
+};
 
 export default function BoardDetail() {
   const { id } = useParams<{ id: string }>();
@@ -69,8 +82,10 @@ export default function BoardDetail() {
 
   if (!board) return (
     <div className="flex flex-col items-center justify-center h-full py-20">
-      <p className="text-xl font-semibold">Board not found</p>
-      <Link to="/boards" className="text-primary text-sm mt-2 hover:underline">← Back to boards</Link>
+      <span className="text-4xl mb-3">🔍</span>
+      <p className="text-xl font-bold">Board not found</p>
+      <p className="text-sm text-muted-foreground mt-1 mb-4">It may have been deleted or moved.</p>
+      <Link to="/boards"><Button variant="outline" size="sm" className="gap-2"><ArrowLeft className="h-3.5 w-3.5" /> Back to boards</Button></Link>
     </div>
   );
 
@@ -79,18 +94,19 @@ export default function BoardDetail() {
       {/* Header */}
       <div className="p-4 lg:px-8 border-b border-border space-y-3">
         <div className="flex items-center gap-3 flex-wrap">
-          <Link to="/boards" className="text-muted-foreground hover:text-foreground"><ArrowLeft className="h-4 w-4" /></Link>
+          <Link to="/boards" className="text-muted-foreground hover:text-foreground transition-colors"><ArrowLeft className="h-4 w-4" /></Link>
           <span className="text-xl">{board.icon}</span>
-          <h1 className="text-xl font-bold tracking-tight">{board.title}</h1>
-          <Badge variant="secondary" className="text-xs">{boardTasks.length} tasks</Badge>
+          <h1 className="text-xl font-extrabold tracking-tight">{board.title}</h1>
+          <Badge variant="secondary" className="text-xs font-semibold">{boardTasks.length} tasks</Badge>
         </div>
+        {board.description && <p className="text-sm text-muted-foreground">{board.description}</p>}
         <div className="flex items-center gap-2 flex-wrap">
           <div className="relative flex-1 max-w-xs">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-            <Input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search tasks..." className="pl-9 h-8 text-sm" />
+            <Input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search tasks..." className="pl-9 h-9 text-sm" />
           </div>
           <Select value={filterPriority} onValueChange={setFilterPriority}>
-            <SelectTrigger className="w-32 h-8 text-sm"><Filter className="h-3 w-3 mr-1" /><SelectValue /></SelectTrigger>
+            <SelectTrigger className="w-36 h-9 text-sm"><Filter className="h-3 w-3 mr-1.5" /><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Priorities</SelectItem>
               {Object.entries(PRIORITY_LABELS).map(([k, v]) => <SelectItem key={k} value={k}>{v}</SelectItem>)}
@@ -109,11 +125,15 @@ export default function BoardDetail() {
                 <div key={status} className="flex flex-col w-72 flex-shrink-0">
                   <div className="flex items-center justify-between mb-3 px-1">
                     <div className="flex items-center gap-2">
-                      <div className={`h-2.5 w-2.5 rounded-full ${STATUS_DOT[status]}`} />
-                      <span className="text-sm font-semibold">{STATUS_LABELS[status]}</span>
-                      <span className="text-xs text-muted-foreground bg-secondary rounded-full px-2 py-0.5">{columnTasks.length}</span>
+                      <div className={`h-2.5 w-2.5 rounded-full ${STATUS_DOT_COLORS[status]}`} />
+                      <span className="text-sm font-bold">{STATUS_LABELS[status]}</span>
+                      <span className="text-xs text-muted-foreground bg-secondary rounded-full px-2 py-0.5 font-medium">{columnTasks.length}</span>
                     </div>
-                    <button onClick={() => { setCreateStatus(status); setCreateOpen(true); }} className="text-muted-foreground hover:text-foreground">
+                    <button
+                      onClick={() => { setCreateStatus(status); setCreateOpen(true); }}
+                      className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-md p-1 transition-colors"
+                      aria-label={`Add task to ${STATUS_LABELS[status]}`}
+                    >
                       <Plus className="h-4 w-4" />
                     </button>
                   </div>
@@ -122,42 +142,71 @@ export default function BoardDetail() {
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className={`flex-1 space-y-2 rounded-lg p-2 transition-colors min-h-[200px] ${snapshot.isDraggingOver ? 'bg-primary/5' : 'bg-secondary/30'}`}
+                        className={`flex-1 space-y-2 rounded-xl p-2 transition-all min-h-[200px] border border-transparent ${
+                          snapshot.isDraggingOver ? 'bg-primary/5 border-primary/20' : 'bg-secondary/20'
+                        }`}
                       >
+                        {columnTasks.length === 0 && !snapshot.isDraggingOver && (
+                          <div className="flex flex-col items-center justify-center py-10 text-center">
+                            <Inbox className="h-8 w-8 text-muted-foreground/30 mb-2" />
+                            <p className="text-xs text-muted-foreground/60">No tasks here</p>
+                            <button
+                              onClick={() => { setCreateStatus(status); setCreateOpen(true); }}
+                              className="text-xs text-primary hover:underline mt-1"
+                            >
+                              Add a task
+                            </button>
+                          </div>
+                        )}
                         {columnTasks.map((task, index) => (
                           <Draggable key={task.id} draggableId={task.id} index={index}>
                             {(prov, snap) => (
                               <div
                                 ref={prov.innerRef}
                                 {...prov.draggableProps}
-                                {...prov.dragHandleProps}
                                 onClick={() => setSelectedTask(task)}
-                                className={`glass-card rounded-lg p-3 cursor-pointer transition-shadow hover:shadow-md ${snap.isDragging ? 'shadow-lg ring-1 ring-primary/20' : ''}`}
+                                className={`glass-card rounded-xl p-3.5 cursor-pointer transition-all group ${
+                                  snap.isDragging
+                                    ? 'shadow-xl ring-2 ring-primary/20 rotate-[2deg] scale-[1.02]'
+                                    : 'hover:shadow-md hover:border-border'
+                                }`}
                               >
-                                <p className="text-sm font-medium mb-1.5 line-clamp-2">{task.title}</p>
-                                {task.description && <p className="text-xs text-muted-foreground line-clamp-1 mb-2">{task.description}</p>}
-                                <div className="flex items-center gap-2 flex-wrap">
-                                  <span className={`text-[10px] font-semibold uppercase ${PRIORITY_COLORS[task.priority]}`}>{task.priority}</span>
-                                  {task.dueDate && (
-                                    <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
-                                      <Clock className="h-2.5 w-2.5" />{task.dueDate}
-                                    </span>
-                                  )}
-                                  {comments.filter(c => c.taskId === task.id).length > 0 && (
-                                    <span className="flex items-center gap-0.5 text-[10px] text-muted-foreground">
-                                      <MessageSquare className="h-2.5 w-2.5" />{comments.filter(c => c.taskId === task.id).length}
-                                    </span>
-                                  )}
-                                </div>
-                                {task.tags.length > 0 && (
-                                  <div className="flex gap-1 mt-2 flex-wrap">
-                                    {task.tags.slice(0, 2).map(tag => (
-                                      <span key={tag} className="flex items-center gap-0.5 rounded-full bg-secondary px-2 py-0.5 text-[10px] text-muted-foreground">
-                                        <Tag className="h-2 w-2" />{tag}
-                                      </span>
-                                    ))}
+                                <div className="flex items-start gap-2">
+                                  <div
+                                    {...prov.dragHandleProps}
+                                    className="mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing"
+                                  >
+                                    <GripVertical className="h-3.5 w-3.5 text-muted-foreground/50" />
                                   </div>
-                                )}
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-sm font-semibold mb-1 line-clamp-2 leading-snug">{task.title}</p>
+                                    {task.description && <p className="text-xs text-muted-foreground line-clamp-1 mb-2">{task.description}</p>}
+                                    <div className="flex items-center gap-1.5 flex-wrap">
+                                      <span className={`text-[10px] font-bold uppercase rounded-md px-1.5 py-0.5 ${PRIORITY_BG[task.priority]}`}>
+                                        {task.priority}
+                                      </span>
+                                      {task.dueDate && (
+                                        <span className="flex items-center gap-1 text-[10px] text-muted-foreground bg-secondary rounded-md px-1.5 py-0.5">
+                                          <Clock className="h-2.5 w-2.5" />{task.dueDate}
+                                        </span>
+                                      )}
+                                      {comments.filter(c => c.taskId === task.id).length > 0 && (
+                                        <span className="flex items-center gap-0.5 text-[10px] text-muted-foreground bg-secondary rounded-md px-1.5 py-0.5">
+                                          <MessageSquare className="h-2.5 w-2.5" />{comments.filter(c => c.taskId === task.id).length}
+                                        </span>
+                                      )}
+                                    </div>
+                                    {task.tags.length > 0 && (
+                                      <div className="flex gap-1 mt-2 flex-wrap">
+                                        {task.tags.slice(0, 3).map(tag => (
+                                          <span key={tag} className="flex items-center gap-0.5 rounded-full bg-primary/5 border border-primary/10 px-2 py-0.5 text-[10px] text-primary font-medium">
+                                            <Tag className="h-2 w-2" />{tag}
+                                          </span>
+                                        ))}
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
                               </div>
                             )}
                           </Draggable>
@@ -175,105 +224,149 @@ export default function BoardDetail() {
 
       {/* Create Task Dialog */}
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-        <DialogContent>
-          <DialogHeader><DialogTitle>Create Task in {STATUS_LABELS[createStatus]}</DialogTitle></DialogHeader>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader><DialogTitle>New task in {STATUS_LABELS[createStatus]}</DialogTitle></DialogHeader>
           <div className="space-y-4">
-            <div className="space-y-2"><Label>Title</Label><Input value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} placeholder="Task title" /></div>
-            <div className="space-y-2"><Label>Description</Label><Textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} placeholder="Optional description" rows={2} /></div>
+            <div className="space-y-2"><Label>Title</Label><Input value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} placeholder="What needs to be done?" className="h-11" autoFocus /></div>
+            <div className="space-y-2"><Label>Description</Label><Textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} placeholder="Add more context..." rows={3} /></div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
                 <Label>Priority</Label>
                 <Select value={form.priority} onValueChange={v => setForm(f => ({ ...f, priority: v as TaskPriority }))}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="h-10"><SelectValue /></SelectTrigger>
                   <SelectContent>{Object.entries(PRIORITY_LABELS).map(([k, v]) => <SelectItem key={k} value={k}>{v}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
-              <div className="space-y-2"><Label>Due Date</Label><Input type="date" value={form.dueDate} onChange={e => setForm(f => ({ ...f, dueDate: e.target.value }))} /></div>
+              <div className="space-y-2"><Label>Due Date</Label><Input type="date" value={form.dueDate} onChange={e => setForm(f => ({ ...f, dueDate: e.target.value }))} className="h-10" /></div>
             </div>
-            <div className="space-y-2"><Label>Tags (comma-separated)</Label><Input value={form.tags} onChange={e => setForm(f => ({ ...f, tags: e.target.value }))} placeholder="design, frontend" /></div>
-            <Button onClick={handleCreate} className="w-full">Create Task</Button>
+            <div className="space-y-2"><Label>Tags (comma-separated)</Label><Input value={form.tags} onChange={e => setForm(f => ({ ...f, tags: e.target.value }))} placeholder="design, frontend, urgent" /></div>
+            <Button onClick={handleCreate} className="w-full h-11 shadow-lg shadow-primary/20">Create Task</Button>
           </div>
         </DialogContent>
       </Dialog>
 
       {/* Task Detail Dialog */}
-      <Dialog open={!!selectedTask} onOpenChange={o => { if (!o) setSelectedTask(null); }}>
-        <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
-          {selectedTask && (() => {
-            const taskComments = comments.filter(c => c.taskId === selectedTask.id).sort((a, b) => a.createdAt.localeCompare(b.createdAt));
-            return (
-              <>
-                <DialogHeader>
-                  <DialogTitle className="flex items-start justify-between gap-2 pr-8">
-                    <span>{selectedTask.title}</span>
-                  </DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  {selectedTask.description && <p className="text-sm text-muted-foreground">{selectedTask.description}</p>}
-                  <div className="flex flex-wrap gap-2">
-                    <Badge variant="outline">{STATUS_LABELS[selectedTask.status]}</Badge>
-                    <Badge variant="outline" className={PRIORITY_COLORS[selectedTask.priority]}>{PRIORITY_LABELS[selectedTask.priority]}</Badge>
-                    {selectedTask.dueDate && <Badge variant="outline" className="gap-1"><Calendar className="h-3 w-3" />{selectedTask.dueDate}</Badge>}
-                  </div>
-                  {selectedTask.tags.length > 0 && (
-                    <div className="flex gap-1 flex-wrap">{selectedTask.tags.map(t => <Badge key={t} variant="secondary" className="text-xs">{t}</Badge>)}</div>
-                  )}
+      <AnimatePresence>
+        {selectedTask && (
+          <Dialog open={!!selectedTask} onOpenChange={o => { if (!o) setSelectedTask(null); }}>
+            <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-y-auto scrollbar-thin">
+              {(() => {
+                const taskComments = comments.filter(c => c.taskId === selectedTask.id).sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+                return (
+                  <>
+                    <DialogHeader>
+                      <div className="flex items-center gap-2 mb-1">
+                        <Badge className={`text-[10px] font-bold ${PRIORITY_BG[selectedTask.priority]}`} variant="outline">
+                          {PRIORITY_LABELS[selectedTask.priority]}
+                        </Badge>
+                        <Badge variant="outline" className="text-[10px]">{STATUS_LABELS[selectedTask.status]}</Badge>
+                      </div>
+                      <DialogTitle className="text-lg leading-snug">{selectedTask.title}</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-5">
+                      {selectedTask.description && (
+                        <p className="text-sm text-muted-foreground leading-relaxed">{selectedTask.description}</p>
+                      )}
 
-                  {/* Edit status/priority inline */}
-                  <div className="grid grid-cols-2 gap-3 pt-2 border-t border-border">
-                    <div className="space-y-1">
-                      <Label className="text-xs">Status</Label>
-                      <Select value={selectedTask.status} onValueChange={v => { updateTask(selectedTask.id, { status: v as TaskStatus }); setSelectedTask({ ...selectedTask, status: v as TaskStatus }); }}>
-                        <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
-                        <SelectContent>{STATUSES.map(s => <SelectItem key={s} value={s}>{STATUS_LABELS[s]}</SelectItem>)}</SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-1">
-                      <Label className="text-xs">Priority</Label>
-                      <Select value={selectedTask.priority} onValueChange={v => { updateTask(selectedTask.id, { priority: v as TaskPriority }); setSelectedTask({ ...selectedTask, priority: v as TaskPriority }); }}>
-                        <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
-                        <SelectContent>{Object.entries(PRIORITY_LABELS).map(([k, v]) => <SelectItem key={k} value={k}>{v}</SelectItem>)}</SelectContent>
-                      </Select>
-                    </div>
-                  </div>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedTask.dueDate && (
+                          <Badge variant="outline" className="gap-1.5 text-xs">
+                            <Calendar className="h-3 w-3" />{selectedTask.dueDate}
+                          </Badge>
+                        )}
+                        {selectedTask.tags.map(t => (
+                          <Badge key={t} variant="secondary" className="text-xs gap-1">
+                            <Tag className="h-2.5 w-2.5" />{t}
+                          </Badge>
+                        ))}
+                      </div>
 
-                  {/* Comments */}
-                  <div className="pt-3 border-t border-border">
-                    <p className="text-sm font-semibold mb-3 flex items-center gap-1.5"><MessageSquare className="h-3.5 w-3.5" /> Comments ({taskComments.length})</p>
-                    {taskComments.length === 0 && <p className="text-xs text-muted-foreground py-2">No comments yet</p>}
-                    <div className="space-y-2 mb-3 max-h-48 overflow-y-auto">
-                      {taskComments.map(c => (
-                        <div key={c.id} className="rounded-lg bg-secondary/50 p-3">
-                          <div className="flex items-center gap-2 mb-1">
-                            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-[9px] font-bold text-primary">{c.authorName.split(' ').map(n => n[0]).join('')}</div>
-                            <span className="text-xs font-medium">{c.authorName}</span>
-                            <span className="text-[10px] text-muted-foreground">{new Date(c.createdAt).toLocaleDateString()}</span>
-                          </div>
-                          <p className="text-sm text-foreground/90">{c.content}</p>
+                      {/* Edit controls */}
+                      <div className="grid grid-cols-2 gap-3 pt-4 border-t border-border">
+                        <div className="space-y-1.5">
+                          <Label className="text-xs text-muted-foreground">Status</Label>
+                          <Select value={selectedTask.status} onValueChange={v => { updateTask(selectedTask.id, { status: v as TaskStatus }); setSelectedTask({ ...selectedTask, status: v as TaskStatus }); }}>
+                            <SelectTrigger className="h-9 text-xs"><SelectValue /></SelectTrigger>
+                            <SelectContent>{STATUSES.map(s => <SelectItem key={s} value={s}>{STATUS_LABELS[s]}</SelectItem>)}</SelectContent>
+                          </Select>
                         </div>
-                      ))}
-                    </div>
-                    <div className="flex gap-2">
-                      <Input value={newComment} onChange={e => setNewComment(e.target.value)} placeholder="Write a comment..." className="text-sm h-8" onKeyDown={e => e.key === 'Enter' && handleAddComment()} />
-                      <Button size="sm" variant="secondary" onClick={handleAddComment} className="h-8">Post</Button>
-                    </div>
-                  </div>
+                        <div className="space-y-1.5">
+                          <Label className="text-xs text-muted-foreground">Priority</Label>
+                          <Select value={selectedTask.priority} onValueChange={v => { updateTask(selectedTask.id, { priority: v as TaskPriority }); setSelectedTask({ ...selectedTask, priority: v as TaskPriority }); }}>
+                            <SelectTrigger className="h-9 text-xs"><SelectValue /></SelectTrigger>
+                            <SelectContent>{Object.entries(PRIORITY_LABELS).map(([k, v]) => <SelectItem key={k} value={k}>{v}</SelectItem>)}</SelectContent>
+                          </Select>
+                        </div>
+                      </div>
 
-                  <Button variant="destructive" size="sm" className="w-full" onClick={() => { setDeleteId(selectedTask.id); setSelectedTask(null); }}>Delete Task</Button>
-                </div>
-              </>
-            );
-          })()}
-        </DialogContent>
-      </Dialog>
+                      {/* Comments */}
+                      <div className="pt-4 border-t border-border">
+                        <p className="text-sm font-bold mb-3 flex items-center gap-1.5">
+                          <MessageSquare className="h-3.5 w-3.5 text-primary" />
+                          Comments
+                          <span className="text-xs font-normal text-muted-foreground">({taskComments.length})</span>
+                        </p>
+                        {taskComments.length === 0 && (
+                          <div className="text-center py-4">
+                            <p className="text-xs text-muted-foreground">No comments yet. Start the conversation.</p>
+                          </div>
+                        )}
+                        <div className="space-y-2 mb-3 max-h-48 overflow-y-auto scrollbar-thin">
+                          {taskComments.map(c => (
+                            <div key={c.id} className="rounded-xl bg-secondary/40 p-3">
+                              <div className="flex items-center gap-2 mb-1">
+                                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-[9px] font-bold text-primary">{c.authorName.split(' ').map(n => n[0]).join('')}</div>
+                                <span className="text-xs font-semibold">{c.authorName}</span>
+                                <span className="text-[10px] text-muted-foreground">{new Date(c.createdAt).toLocaleDateString()}</span>
+                              </div>
+                              <p className="text-sm text-foreground/90 pl-8">{c.content}</p>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="flex gap-2">
+                          <Input
+                            value={newComment}
+                            onChange={e => setNewComment(e.target.value)}
+                            placeholder="Write a comment..."
+                            className="text-sm h-9"
+                            onKeyDown={e => e.key === 'Enter' && handleAddComment()}
+                          />
+                          <Button size="sm" onClick={handleAddComment} className="h-9 px-4">Post</Button>
+                        </div>
+                      </div>
+
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        className="w-full"
+                        onClick={() => { setDeleteId(selectedTask.id); setSelectedTask(null); }}
+                      >
+                        Delete Task
+                      </Button>
+                    </div>
+                  </>
+                );
+              })()}
+            </DialogContent>
+          </Dialog>
+        )}
+      </AnimatePresence>
 
       {/* Delete Confirm */}
       <AlertDialog open={!!deleteId} onOpenChange={o => { if (!o) setDeleteId(null); }}>
         <AlertDialogContent>
-          <AlertDialogHeader><AlertDialogTitle>Delete task?</AlertDialogTitle><AlertDialogDescription>This action cannot be undone.</AlertDialogDescription></AlertDialogHeader>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete this task?</AlertDialogTitle>
+            <AlertDialogDescription>This action cannot be undone. The task and its comments will be permanently removed.</AlertDialogDescription>
+          </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={() => { if (deleteId) { deleteTask(deleteId); setDeleteId(null); toast({ title: 'Task deleted' }); } }} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Delete</AlertDialogAction>
+            <AlertDialogAction
+              onClick={() => { if (deleteId) { deleteTask(deleteId); setDeleteId(null); toast({ title: 'Task deleted' }); } }}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Delete
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
