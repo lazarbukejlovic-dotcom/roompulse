@@ -14,23 +14,28 @@ const SAMPLE_BOARDS: Board[] = [
   { id: 'b4', title: 'Marketing', description: 'Campaign planning and content calendar', color: '#f59e0b', icon: '📊', createdAt: '2024-03-15T00:00:00Z', userId: 'u1' },
 ];
 
+// Generate realistic dates relative to now
+const daysAgo = (d: number) => new Date(Date.now() - d * 86400000).toISOString();
+const daysFromNow = (d: number) => new Date(Date.now() + d * 86400000).toISOString().slice(0, 10);
+const daysAgoDate = (d: number) => new Date(Date.now() - d * 86400000).toISOString().slice(0, 10);
+
 const SAMPLE_TASKS: Task[] = [
-  { id: 't1', boardId: 'b1', title: 'Define launch timeline', description: 'Create a detailed timeline for the Q2 launch milestones', status: 'done', priority: 'high', dueDate: '2024-04-15', tags: ['planning'], createdAt: '2024-02-05T00:00:00Z', order: 0 },
-  { id: 't2', boardId: 'b1', title: 'Prepare press kit', description: 'Design and compile press materials', status: 'in-progress', priority: 'medium', dueDate: '2024-04-20', tags: ['marketing', 'design'], createdAt: '2024-02-10T00:00:00Z', order: 0 },
-  { id: 't3', boardId: 'b1', title: 'Beta user onboarding', description: 'Set up onboarding flow for beta testers', status: 'todo', priority: 'high', dueDate: '2024-04-25', tags: ['product'], createdAt: '2024-02-12T00:00:00Z', order: 0 },
-  { id: 't4', boardId: 'b1', title: 'Review pricing page', description: 'Final review of pricing tiers and copy', status: 'review', priority: 'urgent', dueDate: '2024-04-10', tags: ['copy'], createdAt: '2024-02-15T00:00:00Z', order: 0 },
-  { id: 't5', boardId: 'b2', title: 'Fix auth redirect loop', description: 'Users stuck in redirect loop after login on Safari', status: 'in-progress', priority: 'urgent', dueDate: '2024-04-08', tags: ['auth', 'critical'], createdAt: '2024-03-01T00:00:00Z', order: 0 },
-  { id: 't6', boardId: 'b2', title: 'Mobile layout overflow', description: 'Cards overflow on small screens', status: 'todo', priority: 'medium', dueDate: '2024-04-12', tags: ['ui'], createdAt: '2024-03-05T00:00:00Z', order: 0 },
-  { id: 't7', boardId: 'b3', title: 'Button component variants', description: 'Add ghost, outline, and link variants', status: 'done', priority: 'medium', dueDate: null, tags: ['components'], createdAt: '2024-03-10T00:00:00Z', order: 0 },
-  { id: 't8', boardId: 'b3', title: 'Color token audit', description: 'Audit and standardize all color tokens', status: 'in-progress', priority: 'low', dueDate: '2024-04-30', tags: ['tokens'], createdAt: '2024-03-12T00:00:00Z', order: 0 },
-  { id: 't9', boardId: 'b4', title: 'Social media calendar', description: 'Plan April social media content', status: 'todo', priority: 'medium', dueDate: '2024-04-05', tags: ['social'], createdAt: '2024-03-20T00:00:00Z', order: 0 },
-  { id: 't10', boardId: 'b4', title: 'Email campaign draft', description: 'Write launch announcement email', status: 'review', priority: 'high', dueDate: '2024-04-18', tags: ['email', 'launch'], createdAt: '2024-03-22T00:00:00Z', order: 0 },
+  { id: 't1', boardId: 'b1', title: 'Define launch timeline', description: 'Create a detailed timeline for the Q2 launch milestones', status: 'done', priority: 'high', dueDate: daysAgoDate(5), tags: ['planning'], createdAt: daysAgo(30), order: 0 },
+  { id: 't2', boardId: 'b1', title: 'Prepare press kit', description: 'Design and compile press materials', status: 'in-progress', priority: 'medium', dueDate: daysFromNow(4), tags: ['marketing', 'design'], createdAt: daysAgo(20), order: 0 },
+  { id: 't3', boardId: 'b1', title: 'Beta user onboarding', description: 'Set up onboarding flow for beta testers', status: 'todo', priority: 'high', dueDate: daysFromNow(8), tags: ['product'], createdAt: daysAgo(15), order: 0 },
+  { id: 't4', boardId: 'b1', title: 'Review pricing page', description: 'Final review of pricing tiers and copy', status: 'review', priority: 'urgent', dueDate: daysAgoDate(2), tags: ['copy'], createdAt: daysAgo(12), order: 0 },
+  { id: 't5', boardId: 'b2', title: 'Fix auth redirect loop', description: 'Users stuck in redirect loop after login on Safari', status: 'in-progress', priority: 'urgent', dueDate: daysFromNow(1), tags: ['auth', 'critical'], createdAt: daysAgo(7), order: 0 },
+  { id: 't6', boardId: 'b2', title: 'Mobile layout overflow', description: 'Cards overflow on small screens', status: 'todo', priority: 'medium', dueDate: daysFromNow(5), tags: ['ui'], createdAt: daysAgo(5), order: 0 },
+  { id: 't7', boardId: 'b3', title: 'Button component variants', description: 'Add ghost, outline, and link variants', status: 'done', priority: 'medium', dueDate: null, tags: ['components'], createdAt: daysAgo(25), order: 0 },
+  { id: 't8', boardId: 'b3', title: 'Color token audit', description: 'Audit and standardize all color tokens', status: 'in-progress', priority: 'low', dueDate: daysFromNow(14), tags: ['tokens'], createdAt: daysAgo(10), order: 0 },
+  { id: 't9', boardId: 'b4', title: 'Social media calendar', description: 'Plan April social media content', status: 'todo', priority: 'medium', dueDate: daysAgoDate(1), tags: ['social'], createdAt: daysAgo(8), order: 0 },
+  { id: 't10', boardId: 'b4', title: 'Email campaign draft', description: 'Write launch announcement email', status: 'review', priority: 'high', dueDate: daysFromNow(3), tags: ['email', 'launch'], createdAt: daysAgo(6), order: 0 },
 ];
 
 const SAMPLE_COMMENTS: Comment[] = [
-  { id: 'c1', taskId: 't5', content: 'Reproduced on Safari 17.2. Looks like a cookie issue.', authorName: 'Alex Chen', createdAt: '2024-03-02T10:00:00Z' },
-  { id: 'c2', taskId: 't5', content: 'Patched the SameSite attribute. Testing now.', authorName: 'Alex Chen', createdAt: '2024-03-03T14:30:00Z' },
-  { id: 'c3', taskId: 't4', content: 'Pricing looks good — just need final copy review from marketing.', authorName: 'Alex Chen', createdAt: '2024-02-20T09:00:00Z' },
+  { id: 'c1', taskId: 't5', content: 'Reproduced on Safari 17.2. Looks like a cookie issue.', authorName: 'Alex Chen', createdAt: daysAgo(3) },
+  { id: 'c2', taskId: 't5', content: 'Patched the SameSite attribute. Testing now.', authorName: 'Alex Chen', createdAt: daysAgo(2) },
+  { id: 'c3', taskId: 't4', content: 'Pricing looks good — just need final copy review from marketing.', authorName: 'Alex Chen', createdAt: daysAgo(1) },
 ];
 
 interface AppState {
@@ -105,6 +110,6 @@ export const useAppStore = create<AppState>()(
 
       addComment: (c) => set((s) => ({ comments: [...s.comments, { ...c, id: uid(), createdAt: now() }] })),
     }),
-    { name: 'roompulse-storage' }
+    { name: 'roompulse-storage-v2' }
   )
 );

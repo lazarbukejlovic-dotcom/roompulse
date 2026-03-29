@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { DragDropContext, Droppable, Draggable, type DropResult } from '@hello-pangea/dnd';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, ArrowLeft, Search, Filter, Calendar, Tag, MessageSquare, Clock, GripVertical, Inbox } from 'lucide-react';
+import { Plus, ArrowLeft, Search, Filter, Calendar, Tag, MessageSquare, Clock, GripVertical, Inbox, Trash2, Pencil } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -12,7 +12,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
-import { STATUS_LABELS, PRIORITY_LABELS, PRIORITY_COLORS, type TaskStatus, type TaskPriority, type Task } from '@/types';
+import { STATUS_LABELS, PRIORITY_LABELS, type TaskStatus, type TaskPriority, type Task } from '@/types';
+import { formatDueDate, formatRelativeDate, getDueUrgency } from '@/lib/dates';
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
@@ -31,7 +32,13 @@ const PRIORITY_BG: Record<TaskPriority, string> = {
   low: 'bg-priority-low/10 text-priority-low',
   medium: 'bg-priority-medium/10 text-priority-medium',
   high: 'bg-priority-high/10 text-priority-high',
-  urgent: 'bg-priority-urgent/10 text-priority-urgent',
+  urgent: 'bg-priority-urgent/10 text-priority-urgent border border-priority-urgent/20',
+};
+
+const DUE_URGENCY_STYLES = {
+  overdue: 'text-destructive bg-destructive/10',
+  soon: 'text-accent-foreground bg-accent/10',
+  normal: 'text-muted-foreground bg-secondary',
 };
 
 export default function BoardDetail() {
@@ -47,6 +54,10 @@ export default function BoardDetail() {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [newComment, setNewComment] = useState('');
+  const [editingTitle, setEditingTitle] = useState(false);
+  const [editingDesc, setEditingDesc] = useState(false);
+  const [editTitle, setEditTitle] = useState('');
+  const [editDesc, setEditDesc] = useState('');
   const [form, setForm] = useState({ title: '', description: '', priority: 'medium' as TaskPriority, dueDate: '', tags: '' });
 
   const boardTasks = useMemo(() => {
@@ -78,6 +89,20 @@ export default function BoardDetail() {
     if (!newComment.trim() || !selectedTask) return;
     addComment({ taskId: selectedTask.id, content: newComment, authorName: user?.name || 'Anonymous' });
     setNewComment('');
+  };
+
+  const handleSaveTitle = () => {
+    if (!selectedTask || !editTitle.trim()) return;
+    updateTask(selectedTask.id, { title: editTitle });
+    setSelectedTask({ ...selectedTask, title: editTitle });
+    setEditingTitle(false);
+  };
+
+  const handleSaveDesc = () => {
+    if (!selectedTask) return;
+    updateTask(selectedTask.id, { description: editDesc });
+    setSelectedTask({ ...selectedTask, description: editDesc });
+    setEditingDesc(false);
   };
 
   if (!board) return (
@@ -158,59 +183,63 @@ export default function BoardDetail() {
                             </button>
                           </div>
                         )}
-                        {columnTasks.map((task, index) => (
-                          <Draggable key={task.id} draggableId={task.id} index={index}>
-                            {(prov, snap) => (
-                              <div
-                                ref={prov.innerRef}
-                                {...prov.draggableProps}
-                                onClick={() => setSelectedTask(task)}
-                                className={`glass-card rounded-xl p-3.5 cursor-pointer transition-all group ${
-                                  snap.isDragging
-                                    ? 'shadow-xl ring-2 ring-primary/20 rotate-[2deg] scale-[1.02]'
-                                    : 'hover:shadow-md hover:border-border'
-                                }`}
-                              >
-                                <div className="flex items-start gap-2">
-                                  <div
-                                    {...prov.dragHandleProps}
-                                    className="mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing"
-                                  >
-                                    <GripVertical className="h-3.5 w-3.5 text-muted-foreground/50" />
-                                  </div>
-                                  <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-semibold mb-1 line-clamp-2 leading-snug">{task.title}</p>
-                                    {task.description && <p className="text-xs text-muted-foreground line-clamp-1 mb-2">{task.description}</p>}
-                                    <div className="flex items-center gap-1.5 flex-wrap">
-                                      <span className={`text-[10px] font-bold uppercase rounded-md px-1.5 py-0.5 ${PRIORITY_BG[task.priority]}`}>
-                                        {task.priority}
-                                      </span>
-                                      {task.dueDate && (
-                                        <span className="flex items-center gap-1 text-[10px] text-muted-foreground bg-secondary rounded-md px-1.5 py-0.5">
-                                          <Clock className="h-2.5 w-2.5" />{task.dueDate}
+                        {columnTasks.map((task, index) => {
+                          const urgency = getDueUrgency(task.dueDate);
+                          const isUrgentPriority = task.priority === 'urgent';
+                          return (
+                            <Draggable key={task.id} draggableId={task.id} index={index}>
+                              {(prov, snap) => (
+                                <div
+                                  ref={prov.innerRef}
+                                  {...prov.draggableProps}
+                                  onClick={() => setSelectedTask(task)}
+                                  className={`glass-card rounded-xl p-3.5 cursor-pointer transition-all group ${
+                                    snap.isDragging
+                                      ? 'shadow-xl ring-2 ring-primary/20 rotate-[2deg] scale-[1.02]'
+                                      : 'hover:shadow-md hover:border-border'
+                                  } ${urgency === 'overdue' ? 'border-destructive/20 bg-destructive/[0.02]' : ''} ${isUrgentPriority ? 'ring-1 ring-priority-urgent/15' : ''}`}
+                                >
+                                  <div className="flex items-start gap-2">
+                                    <div
+                                      {...prov.dragHandleProps}
+                                      className="mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing"
+                                    >
+                                      <GripVertical className="h-3.5 w-3.5 text-muted-foreground/50" />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                      <p className="text-sm font-semibold mb-1 line-clamp-2 leading-snug">{task.title}</p>
+                                      {task.description && <p className="text-xs text-muted-foreground line-clamp-1 mb-2">{task.description}</p>}
+                                      <div className="flex items-center gap-1.5 flex-wrap">
+                                        <span className={`text-[10px] font-bold uppercase rounded-md px-1.5 py-0.5 ${PRIORITY_BG[task.priority]}`}>
+                                          {isUrgentPriority ? '🔥 ' : ''}{PRIORITY_LABELS[task.priority]}
                                         </span>
-                                      )}
-                                      {comments.filter(c => c.taskId === task.id).length > 0 && (
-                                        <span className="flex items-center gap-0.5 text-[10px] text-muted-foreground bg-secondary rounded-md px-1.5 py-0.5">
-                                          <MessageSquare className="h-2.5 w-2.5" />{comments.filter(c => c.taskId === task.id).length}
-                                        </span>
+                                        {task.dueDate && (
+                                          <span className={`flex items-center gap-1 text-[10px] font-medium rounded-md px-1.5 py-0.5 ${DUE_URGENCY_STYLES[urgency]}`}>
+                                            <Clock className="h-2.5 w-2.5" />{urgency === 'overdue' ? 'Overdue' : formatDueDate(task.dueDate)}
+                                          </span>
+                                        )}
+                                        {comments.filter(c => c.taskId === task.id).length > 0 && (
+                                          <span className="flex items-center gap-0.5 text-[10px] text-muted-foreground bg-secondary rounded-md px-1.5 py-0.5">
+                                            <MessageSquare className="h-2.5 w-2.5" />{comments.filter(c => c.taskId === task.id).length}
+                                          </span>
+                                        )}
+                                      </div>
+                                      {task.tags.length > 0 && (
+                                        <div className="flex gap-1 mt-2 flex-wrap">
+                                          {task.tags.slice(0, 3).map(tag => (
+                                            <span key={tag} className="flex items-center gap-0.5 rounded-full bg-primary/5 border border-primary/10 px-2 py-0.5 text-[10px] text-primary font-medium">
+                                              <Tag className="h-2 w-2" />{tag}
+                                            </span>
+                                          ))}
+                                        </div>
                                       )}
                                     </div>
-                                    {task.tags.length > 0 && (
-                                      <div className="flex gap-1 mt-2 flex-wrap">
-                                        {task.tags.slice(0, 3).map(tag => (
-                                          <span key={tag} className="flex items-center gap-0.5 rounded-full bg-primary/5 border border-primary/10 px-2 py-0.5 text-[10px] text-primary font-medium">
-                                            <Tag className="h-2 w-2" />{tag}
-                                          </span>
-                                        ))}
-                                      </div>
-                                    )}
                                   </div>
                                 </div>
-                              </div>
-                            )}
-                          </Draggable>
-                        ))}
+                              )}
+                            </Draggable>
+                          );
+                        })}
                         {provided.placeholder}
                       </div>
                     )}
@@ -248,30 +277,77 @@ export default function BoardDetail() {
       {/* Task Detail Dialog */}
       <AnimatePresence>
         {selectedTask && (
-          <Dialog open={!!selectedTask} onOpenChange={o => { if (!o) setSelectedTask(null); }}>
+          <Dialog open={!!selectedTask} onOpenChange={o => { if (!o) { setSelectedTask(null); setEditingTitle(false); setEditingDesc(false); } }}>
             <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-y-auto scrollbar-thin">
               {(() => {
                 const taskComments = comments.filter(c => c.taskId === selectedTask.id).sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+                const urgency = getDueUrgency(selectedTask.dueDate);
                 return (
                   <>
                     <DialogHeader>
                       <div className="flex items-center gap-2 mb-1">
                         <Badge className={`text-[10px] font-bold ${PRIORITY_BG[selectedTask.priority]}`} variant="outline">
-                          {PRIORITY_LABELS[selectedTask.priority]}
+                          {selectedTask.priority === 'urgent' ? '🔥 ' : ''}{PRIORITY_LABELS[selectedTask.priority]}
                         </Badge>
                         <Badge variant="outline" className="text-[10px]">{STATUS_LABELS[selectedTask.status]}</Badge>
+                        {urgency === 'overdue' && (
+                          <Badge variant="destructive" className="text-[10px]">Overdue</Badge>
+                        )}
                       </div>
-                      <DialogTitle className="text-lg leading-snug">{selectedTask.title}</DialogTitle>
+                      {editingTitle ? (
+                        <div className="flex gap-2">
+                          <Input
+                            value={editTitle}
+                            onChange={e => setEditTitle(e.target.value)}
+                            className="text-lg font-semibold"
+                            autoFocus
+                            onKeyDown={e => { if (e.key === 'Enter') handleSaveTitle(); if (e.key === 'Escape') setEditingTitle(false); }}
+                          />
+                          <Button size="sm" onClick={handleSaveTitle}>Save</Button>
+                        </div>
+                      ) : (
+                        <DialogTitle
+                          className="text-lg leading-snug cursor-pointer hover:text-primary transition-colors group flex items-center gap-2"
+                          onClick={() => { setEditTitle(selectedTask.title); setEditingTitle(true); }}
+                        >
+                          {selectedTask.title}
+                          <Pencil className="h-3 w-3 opacity-0 group-hover:opacity-50 transition-opacity" />
+                        </DialogTitle>
+                      )}
                     </DialogHeader>
                     <div className="space-y-5">
-                      {selectedTask.description && (
-                        <p className="text-sm text-muted-foreground leading-relaxed">{selectedTask.description}</p>
-                      )}
+                      {/* Description */}
+                      <div>
+                        <Label className="text-xs text-muted-foreground mb-1.5 block">Description</Label>
+                        {editingDesc ? (
+                          <div className="space-y-2">
+                            <Textarea
+                              value={editDesc}
+                              onChange={e => setEditDesc(e.target.value)}
+                              rows={3}
+                              autoFocus
+                              onKeyDown={e => { if (e.key === 'Escape') setEditingDesc(false); }}
+                            />
+                            <div className="flex gap-2">
+                              <Button size="sm" onClick={handleSaveDesc}>Save</Button>
+                              <Button size="sm" variant="ghost" onClick={() => setEditingDesc(false)}>Cancel</Button>
+                            </div>
+                          </div>
+                        ) : (
+                          <p
+                            className="text-sm text-muted-foreground leading-relaxed cursor-pointer hover:bg-secondary/40 rounded-lg p-2 -m-2 transition-colors"
+                            onClick={() => { setEditDesc(selectedTask.description || ''); setEditingDesc(true); }}
+                          >
+                            {selectedTask.description || 'Click to add a description...'}
+                          </p>
+                        )}
+                      </div>
 
+                      {/* Metadata */}
                       <div className="flex flex-wrap gap-2">
                         {selectedTask.dueDate && (
-                          <Badge variant="outline" className="gap-1.5 text-xs">
-                            <Calendar className="h-3 w-3" />{selectedTask.dueDate}
+                          <Badge variant="outline" className={`gap-1.5 text-xs ${urgency === 'overdue' ? 'border-destructive/30 text-destructive' : ''}`}>
+                            <Calendar className="h-3 w-3" />{formatDueDate(selectedTask.dueDate)}
                           </Badge>
                         )}
                         {selectedTask.tags.map(t => (
@@ -279,6 +355,13 @@ export default function BoardDetail() {
                             <Tag className="h-2.5 w-2.5" />{t}
                           </Badge>
                         ))}
+                      </div>
+
+                      {/* Task info */}
+                      <div className="text-[11px] text-muted-foreground/70 flex items-center gap-3">
+                        <span>Created {formatRelativeDate(selectedTask.createdAt)}</span>
+                        <span>·</span>
+                        <span>ID: {selectedTask.id.slice(0, 8)}</span>
                       </div>
 
                       {/* Edit controls */}
@@ -317,7 +400,7 @@ export default function BoardDetail() {
                               <div className="flex items-center gap-2 mb-1">
                                 <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-[9px] font-bold text-primary">{c.authorName.split(' ').map(n => n[0]).join('')}</div>
                                 <span className="text-xs font-semibold">{c.authorName}</span>
-                                <span className="text-[10px] text-muted-foreground">{new Date(c.createdAt).toLocaleDateString()}</span>
+                                <span className="text-[10px] text-muted-foreground">{formatRelativeDate(c.createdAt)}</span>
                               </div>
                               <p className="text-sm text-foreground/90 pl-8">{c.content}</p>
                             </div>
@@ -335,14 +418,15 @@ export default function BoardDetail() {
                         </div>
                       </div>
 
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        className="w-full"
-                        onClick={() => { setDeleteId(selectedTask.id); setSelectedTask(null); }}
-                      >
-                        Delete Task
-                      </Button>
+                      {/* Delete - subdued */}
+                      <div className="pt-3 border-t border-border">
+                        <button
+                          onClick={() => { setDeleteId(selectedTask.id); setSelectedTask(null); }}
+                          className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-destructive transition-colors"
+                        >
+                          <Trash2 className="h-3 w-3" /> Delete task
+                        </button>
+                      </div>
                     </div>
                   </>
                 );
