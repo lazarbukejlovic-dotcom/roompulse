@@ -110,6 +110,6 @@ export const useAppStore = create<AppState>()(
 
       addComment: (c) => set((s) => ({ comments: [...s.comments, { ...c, id: uid(), createdAt: now() }] })),
     }),
-    { name: 'roompulse-storage' }
+    { name: 'roompulse-storage-v2' }
   )
 );
