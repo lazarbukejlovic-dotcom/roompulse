@@ -53,7 +53,7 @@ export default function SignUp() {
             ))}
           </div>
         </motion.div>
-        <p className="text-xs text-muted-foreground">© 2024 RoomPulse. Portfolio project.</p>
+        <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} RoomPulse. All rights reserved.</p>
       </div>
 
       {/* Right panel - form */}
