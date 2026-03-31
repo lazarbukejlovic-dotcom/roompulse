@@ -43,10 +43,9 @@ Add project screenshots here.
 
 Example:
 
-```md
-![Landing Page](./screenshots/landing-page.png)
-![Dashboard](./screenshots/dashboard.png)
-![Board View](./screenshots/board-view.png)
+    ![Landing Page](./screenshots/landing-page.png)
+    ![Dashboard](./screenshots/dashboard.png)
+    ![Board View](./screenshots/board-view.png)
 
 ## Getting Started
 
@@ -57,37 +56,29 @@ Example:
 
 ### Installation
 
-~~~bash
-git clone https://github.com/lazarbukeljovic-dotcom/pulse-board-flow.git
-cd pulse-board-flow
-npm install
-~~~
+    git clone https://github.com/lazarbukeljovic-dotcom/pulse-board-flow.git
+    cd pulse-board-flow
+    npm install
 
 ### Run Locally
 
-~~~bash
-npm run dev
-~~~
+    npm run dev
 
 ### Build for Production
 
-~~~bash
-npm run build
-npm run preview
-~~~
+    npm run build
+    npm run preview
 
 ## Project Structure
 
-~~~text
-src/
-├── components/
-├── hooks/
-├── lib/
-├── pages/
-├── store/
-├── types/
-└── main.tsx
-~~~
+    src/
+    ├── components/
+    ├── hooks/
+    ├── lib/
+    ├── pages/
+    ├── store/
+    ├── types/
+    └── main.tsx
 
 ## What I Focused On
 
