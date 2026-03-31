@@ -1,75 +1,52 @@
-# ClientFlow
+# RoomPulse
 
-A modern client and project management platform built for freelancers, consultants, and small agencies.
+Modern task and board management for small teams, creators, and freelancers.
 
-ClientFlow helps users manage clients, projects, invoices, deadlines, and business activity in one clean and professional dashboard. The project was designed to feel like a realistic business SaaS product rather than a simple CRUD demo.
+RoomPulse is a clean SaaS-style project management app designed to help users organize work visually with Kanban boards, smart task tracking, and a polished dashboard experience.
 
 ## Overview
 
-ClientFlow was built to solve a common problem for freelancers and small teams: work is often scattered across spreadsheets, notes, email threads, and invoicing tools. Instead of switching between disconnected systems, ClientFlow brings everything into one place.
+RoomPulse was built around a simple idea: many project management tools feel either too complex or too limited. This project aims to sit in the middle — offering a modern, user-friendly experience with enough structure for real workflows while staying simple and approachable.
 
-The app combines client management, project tracking, task organization, invoicing, and business insights inside a polished, business-focused interface. The main goal of the project was to create a stronger, more serious portfolio piece that demonstrates product thinking, structured data handling, and modern frontend development.
+The app includes boards, task management, dashboard analytics, comments, filters, dark mode, and responsive layouts, all presented in a clean product-style interface.
 
-## Key Features
+## Features
 
-- Client management with searchable client records
-- Project tracking with status, budget, progress, and deadlines
-- Project detail pages with task organization
-- Invoice tracking with paid, unpaid, and overdue states
-- Dashboard with business stats, recent activity, and deadline alerts
-- Settings page with profile, business information, and notification controls
-- Authentication flow with sign up and sign in pages
-- Responsive business dashboard layout
-- Consistent visual system across pages
-- Professional SaaS-style landing page
-
-## Why This Project Stands Out
-
-ClientFlow was intentionally designed to feel more realistic and business-oriented than a typical junior portfolio app.
-
-Instead of focusing only on visual polish or simple task lists, this project emphasizes:
-
-- real-world product structure
-- multiple connected data views
-- business use cases
-- clearer information hierarchy
-- stronger UX for dashboards, tables, lists, and management workflows
-
-It represents a step forward from a simpler productivity project into a more serious product environment.
+- Kanban-style board management
+- Drag-and-drop task organization
+- Task priorities, due dates, and tags
+- Dashboard with progress and activity insights
+- Comments and collaboration flow
+- Search and filtering
+- Dark mode support
+- Skeleton loading states
+- Error handling states
+- Responsive design for desktop, tablet, and mobile
+- Human-readable relative dates
 
 ## Tech Stack
 
 - **Frontend:** React, TypeScript
 - **Styling:** Tailwind CSS, shadcn/ui
-- **Routing:** React Router
 - **State Management:** Zustand
-- **Data Handling:** Mock structured business data
+- **Server State / Data Fetching:** TanStack React Query
+- **Routing:** React Router
+- **Charts:** Recharts
+- **Drag and Drop:** @hello-pangea/dnd
+- **Animations:** Framer Motion
+- **Date Utilities:** date-fns
 - **Build Tool:** Vite
-
-## Pages Included
-
-- Landing page
-- Sign in
-- Sign up
-- Dashboard
-- Clients
-- Client details
-- Projects
-- Project details
-- Invoices
-- Settings
-- 404 page
 
 ## Screenshots
 
-Suggested screenshots to include later:
+Add project screenshots here.
 
-- Landing page
-- Dashboard
-- Clients page
-- Project details page
-- Invoices page
-- Settings page
+Example:
+
+```md
+![Landing Page](./screenshots/landing-page.png)
+![Dashboard](./screenshots/dashboard.png)
+![Board View](./screenshots/board-view.png)
 
 ## Getting Started
 
@@ -80,99 +57,79 @@ Suggested screenshots to include later:
 
 ### Installation
 
-```bash
-git clone https://github.com/lazarbukeljovic-dotcom/clientflow.git
-cd clientflow
+~~~bash
+git clone https://github.com/lazarbukeljovic-dotcom/pulse-board-flow.git
+cd pulse-board-flow
 npm install
-
-```
+~~~
 
 ### Run Locally
 
-```bash
+~~~bash
 npm run dev
-```
+~~~
 
 ### Build for Production
 
-```bash
+~~~bash
 npm run build
 npm run preview
-```
+~~~
 
 ## Project Structure
 
-```text
+~~~text
 src/
 ├── components/
-├── pages/
 ├── hooks/
-├── store/
 ├── lib/
-├── data/
+├── pages/
+├── store/
 ├── types/
 └── main.tsx
-```
-
-## Product Thinking Behind the Project
-
-While building ClientFlow, the focus was not only on making the interface look clean, but also on making the app feel believable and useful.
-
-Important decisions included:
-
-- organizing data around clients, projects, invoices, and tasks
-- designing a dashboard with meaningful summary information
-- creating pages that feel connected instead of isolated
-- improving UX for real business workflows
-- making the app look structured, trustworthy, and easy to scan
+~~~
 
 ## What I Focused On
 
-- building a more serious business-oriented SaaS interface
-- improving dashboard and table/list design
-- creating clearer relationships between app sections
-- making the UI feel more complete and product-like
-- improving visual hierarchy, spacing, and usability
-- moving beyond a simple portfolio CRUD app
+While building RoomPulse, I mainly focused on:
 
-## Challenges
-
-Some of the main challenges in this project were:
-
-- balancing simplicity with product depth
-- making the app feel realistic without overcomplicating the scope
-- keeping the design clean while presenting more business data
-- creating consistency across dashboard, tables, cards, forms, and detail pages
-
-## Lessons Learned
-
-This project helped me improve in several areas:
-
-- structuring a more advanced multi-page React application
-- designing interfaces for business-oriented workflows
-- creating more believable product experiences
-- handling relationships between different types of data
-- thinking more like a product builder, not just a UI implementer
+- creating a clean and modern SaaS-style UI
+- improving UX with better spacing, hierarchy, and readability
+- making the dashboard feel more complete and useful
+- building reusable components
+- adding polished product details such as skeleton loaders, error states, and relative dates
+- keeping the project responsive across screen sizes
 
 ## Future Improvements
 
-Possible next improvements include:
+Possible future improvements include:
 
 - backend integration with persistent data storage
-- real authentication and protected user data
-- advanced invoice actions
-- richer project/task editing flows
-- activity history and audit tracking
-- improved filtering and analytics
-- team roles and permissions
+- authentication with real user accounts
+- real-time collaboration
+- command palette for faster navigation
+- global search across boards and tasks
+- activity log and audit trail
+- role-based access control
+
+## Lessons Learned
+
+This project helped me improve my skills in:
+
+- building a multi-page React application
+- structuring components more clearly
+- improving UI consistency
+- creating better loading and error states
+- balancing clean design with practical functionality
+- thinking more about product quality, not just features
 
 ## Live Demo
 
-[View Live Demo](https://useclientflow.lovable.app)
+[View Live Demo](https://pulse-board-flow.lovable.app)
 
 ## Repository
 
-[GitHub Repository](https://github.com/lazarbukeljovic-dotcom/clientflow)
+[GitHub Repository](https://github.com/lazarbukeljovic-dotcom/pulse-board-flow)
 
 ## Author
 
