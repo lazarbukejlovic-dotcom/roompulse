@@ -120,7 +120,7 @@ This project helped me improve my skills in:
 
 ## Repository
 
-[GitHub Repository](https://github.com/lazarbukeljovic-dotcom/pulse-board-flow)
+[GitHub Repository](https://github.com/lazarbukejlovic-dotcom/pulse-board-flow)
 
 ## Author
 
