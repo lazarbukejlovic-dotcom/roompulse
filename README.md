@@ -116,7 +116,7 @@ This project helped me improve my skills in:
 
 ## Live Demo
 
-[View Live Demo](https://pulse-board-flow.lovable.app)
+[View Live Demo](https://roompulse.lovable.app/)
 
 ## Repository
 
