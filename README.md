@@ -39,13 +39,9 @@ The app includes boards, task management, dashboard analytics, comments, filters
 
 ## Screenshots
 
-Add project screenshots here.
-
-Example:
-
-    ![Landing Page](./screenshots/landing-page.png)
-    ![Dashboard](./screenshots/dashboard.png)
-    ![Board View](./screenshots/board-view.png)
+![RoomPulse Screenshot 1](Screenshot%202026-04-01%20192311.png)
+![RoomPulse Screenshot 2](Screenshot%202026-04-01%20192546.png)
+![RoomPulse Screenshot 3](Screenshot%202026-04-01%20192649.png)
 
 ## Getting Started
 
