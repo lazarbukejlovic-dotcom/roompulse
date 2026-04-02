@@ -39,9 +39,16 @@ The app includes boards, task management, dashboard analytics, comments, filters
 
 ## Screenshots
 
-![RoomPulse Screenshot 1](Screenshot%202026-04-01%20192311.png)
-![RoomPulse Screenshot 2](Screenshot%202026-04-01%20192546.png)
-![RoomPulse Screenshot 3](Screenshot%202026-04-01%20192649.png)
+A quick look at the RoomPulse interface, including the landing page, dashboard, and project view.
+
+### Landing Page
+![RoomPulse Landing Page](./Screenshot%202026-04-01%20192311.png)
+
+### Dashboard
+![RoomPulse Dashboard](./Screenshot%202026-04-01%20192546.png)
+
+### Project Page
+![RoomPulse Project Page](./Screenshot%202026-04-01%20192649.png)
 
 ## Getting Started
 
