@@ -120,6 +120,6 @@ This project helped me improve my skills in:
 
 ## Author
 
-Built by Lazar
+Built by Lazar Bukejlovic
 
 - GitHub: [lazarbukeljovic-dotcom](https://github.com/lazarbukeljovic-dotcom)
