@@ -5,12 +5,12 @@ import { Button } from '@/components/ui/button';
 import { useRef } from 'react';
 
 const features = [
-  { icon: Columns3, title: 'Workflow Boards', desc: 'Visual task flow across statuses. See what's moving, what's stuck, and what's shipping.' },
+  { icon: Columns3, title: 'Workflow Boards', desc: 'Visual task flow across statuses. See what\'s moving, what\'s stuck, and what\'s shipping.' },
   { icon: AlertTriangle, title: 'Blocker Visibility', desc: 'Blocked tasks surface immediately so nothing stalls delivery silently.' },
-  { icon: Activity, title: 'Execution Dashboard', desc: 'Completion rates, delivery risk, and workload signals — not vanity metrics.' },
-  { icon: Users, title: 'Team Ownership', desc: 'Every task has an owner. Know who's carrying what and where handoffs happen.' },
+  { icon: Activity, title: 'Execution Dashboard', desc: 'Completion rates, delivery risk, and workload signals -- not vanity metrics.' },
+  { icon: Users, title: 'Team Ownership', desc: 'Every task has an owner. Know who\'s carrying what and where handoffs happen.' },
   { icon: Shield, title: 'Secure by Default', desc: 'Authentication, protected routes, and scoped access from day one.' },
-  { icon: LayoutDashboard, title: 'Dark Mode', desc: 'A carefully crafted dark theme that looks stunning — not just inverted colors.' },
+  { icon: LayoutDashboard, title: 'Dark Mode', desc: 'A carefully crafted dark theme that looks stunning -- not just inverted colors.' },
 ];
 
 const fadeUp = { hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } };
