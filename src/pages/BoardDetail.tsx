@@ -208,6 +208,11 @@ export default function BoardDetail() {
                                     </div>
                                     <div className="flex-1 min-w-0">
                                       <p className="text-sm font-semibold mb-1 line-clamp-2 leading-snug">{task.title}</p>
+                                      {task.blocked && (
+                                        <div className="flex items-center gap-1 mb-1.5 text-[10px] font-semibold text-destructive">
+                                          <ShieldAlert className="h-3 w-3" /> Blocked
+                                        </div>
+                                      )}
                                       {task.description && <p className="text-xs text-muted-foreground line-clamp-1 mb-2">{task.description}</p>}
                                       <div className="flex items-center gap-1.5 flex-wrap">
                                         <span className={`text-[10px] font-bold uppercase rounded-md px-1.5 py-0.5 ${PRIORITY_BG[task.priority]}`}>
