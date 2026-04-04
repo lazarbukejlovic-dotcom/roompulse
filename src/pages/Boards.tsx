@@ -99,8 +99,8 @@ export default function Boards() {
       {boards.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <p className="text-4xl mb-3">📋</p>
-          <p className="font-semibold">No boards yet</p>
-          <p className="text-sm text-muted-foreground mt-1">Create your first board to get started</p>
+          <p className="font-semibold">No workflows yet</p>
+          <p className="text-sm text-muted-foreground mt-1">Create your first workflow to start tracking execution</p>
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
