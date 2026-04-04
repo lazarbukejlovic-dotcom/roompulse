@@ -238,6 +238,11 @@ export default function BoardDetail() {
                                           ))}
                                         </div>
                                       )}
+                                      {task.assignee && (
+                                        <div className="flex items-center gap-1 mt-2 text-[10px] text-muted-foreground">
+                                          <UserCircle className="h-3 w-3" />{task.assignee}
+                                        </div>
+                                      )}
                                     </div>
                                   </div>
                                 </div>
