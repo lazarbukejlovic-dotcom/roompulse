@@ -30,6 +30,9 @@ export interface Task {
   tags: string[];
   createdAt: string;
   order: number;
+  assignee?: string;
+  blocked?: boolean;
+  blockedReason?: string;
 }
 
 export interface Comment {
