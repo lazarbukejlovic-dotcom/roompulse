@@ -7,8 +7,8 @@ import { DarkModeToggle } from '@/components/DarkModeToggle';
 import { cn } from '@/lib/utils';
 
 const navItems = [
-  { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/boards', icon: Columns3, label: 'Boards' },
+  { to: '/dashboard', icon: LayoutDashboard, label: 'Overview' },
+  { to: '/boards', icon: Columns3, label: 'Workflows' },
   { to: '/profile', icon: User, label: 'Profile' },
 ];
 

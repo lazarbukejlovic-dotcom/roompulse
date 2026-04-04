@@ -87,8 +87,8 @@ export default function Boards() {
     <div className="p-4 lg:p-8 max-w-6xl mx-auto space-y-6">
       <motion.div initial="hidden" animate="visible" variants={fadeIn} className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Boards</h1>
-          <p className="text-sm text-muted-foreground mt-1">{boards.length} boards</p>
+          <h1 className="text-2xl font-bold tracking-tight">Workflows</h1>
+          <p className="text-sm text-muted-foreground mt-1">{boards.length} active workflows</p>
         </div>
         <Dialog open={createOpen} onOpenChange={o => { setCreateOpen(o); if (!o) resetForm(); }}>
           <DialogTrigger asChild><Button size="sm" className="gap-2"><Plus className="h-4 w-4" /> New Board</Button></DialogTrigger>
@@ -99,8 +99,8 @@ export default function Boards() {
       {boards.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <p className="text-4xl mb-3">📋</p>
-          <p className="font-semibold">No boards yet</p>
-          <p className="text-sm text-muted-foreground mt-1">Create your first board to get started</p>
+          <p className="font-semibold">No workflows yet</p>
+          <p className="text-sm text-muted-foreground mt-1">Create your first workflow to start tracking execution</p>
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { CheckCircle2, Clock, AlertTriangle, Columns3, Activity, ArrowUpRight, TrendingUp, Plus } from 'lucide-react';
+import { CheckCircle2, Clock, AlertTriangle, Columns3, Activity, ArrowUpRight, TrendingUp, Plus, ShieldAlert, UserCircle } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -8,7 +8,7 @@ import { Progress } from '@/components/ui/progress';
 import { STATUS_LABELS, PRIORITY_LABELS, type TaskStatus } from '@/types';
 import { Link, useNavigate } from 'react-router-dom';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-import { formatShortDate, formatRelativeDate, formatDueDate, getDueUrgency } from '@/lib/dates';
+import { formatRelativeDate, formatDueDate, getDueUrgency } from '@/lib/dates';
 
 const fadeIn = { hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } };
 const stagger = { visible: { transition: { staggerChildren: 0.06 } } };
@@ -38,6 +38,9 @@ export default function Dashboard() {
   };
 
   const completionRate = tasks.length ? Math.round((statusCounts['done'] / tasks.length) * 100) : 0;
+  const blockedTasks = tasks.filter(t => t.blocked && t.status !== 'done');
+  const overdueTasks = tasks.filter(t => getDueUrgency(t.dueDate) === 'overdue' && t.status !== 'done');
+  const atRiskCount = blockedTasks.length + overdueTasks.length;
 
   const chartData = (Object.entries(statusCounts) as [TaskStatus, number][])
     .filter(([, count]) => count > 0)
@@ -49,10 +52,10 @@ export default function Dashboard() {
     .slice(0, 5);
 
   const stats = [
-    { label: 'Total Boards', value: boards.length, icon: Columns3, color: 'text-primary', bg: 'bg-primary/10' },
+    { label: 'Workflows', value: boards.length, icon: Columns3, color: 'text-primary', bg: 'bg-primary/10' },
     { label: 'Total Tasks', value: tasks.length, icon: CheckCircle2, color: 'text-status-progress', bg: 'bg-status-progress/10' },
     { label: 'In Progress', value: statusCounts['in-progress'], icon: Clock, color: 'text-accent', bg: 'bg-accent/10' },
-    { label: 'Urgent', value: tasks.filter(t => t.priority === 'urgent').length, icon: AlertTriangle, color: 'text-destructive', bg: 'bg-destructive/10' },
+    { label: 'At Risk', value: atRiskCount, icon: AlertTriangle, color: 'text-destructive', bg: 'bg-destructive/10' },
   ];
 
   const greeting = (() => {
@@ -67,11 +70,11 @@ export default function Dashboard() {
       {/* Header */}
       <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ duration: 0.5 }} className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-medium text-muted-foreground mb-1">Dashboard</p>
+          <p className="text-xs font-medium text-muted-foreground mb-1">Execution Overview</p>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
             {greeting}, {user?.name?.split(' ')[0]} 👋
           </h1>
-          <p className="text-muted-foreground text-sm mt-1">Here's what's happening across your workspace today.</p>
+          <p className="text-muted-foreground text-sm mt-1">Here's the state of work across your team right now.</p>
         </div>
         <Button size="sm" className="gap-2 shadow-lg shadow-primary/20 flex-shrink-0" onClick={() => {
           if (boards.length > 0) navigate(`/boards/${boards[0].id}`);
@@ -106,7 +109,7 @@ export default function Dashboard() {
           <Card className="glass-card h-full">
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
-                <TrendingUp className="h-4 w-4 text-primary" /> Completion Overview
+                <TrendingUp className="h-4 w-4 text-primary" /> Execution Progress
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -131,7 +134,7 @@ export default function Dashboard() {
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
                     <span className="text-xl font-extrabold">{completionRate}%</span>
-                    <span className="text-[10px] text-muted-foreground">Done</span>
+                    <span className="text-[10px] text-muted-foreground">Shipped</span>
                   </div>
                 </div>
                 <div className="space-y-2.5 flex-1 min-w-0">
@@ -150,12 +153,12 @@ export default function Dashboard() {
           </Card>
         </motion.div>
 
-        {/* Board Progress */}
+        {/* Workflow Progress */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.3 }} className="lg:col-span-3">
           <Card className="glass-card h-full">
             <CardHeader className="flex-row items-center justify-between">
               <CardTitle className="text-base flex items-center gap-2">
-                <Columns3 className="h-4 w-4 text-primary" /> Board Progress
+                <Columns3 className="h-4 w-4 text-primary" /> Workflow Progress
               </CardTitle>
               <Link to="/boards" className="text-xs text-primary hover:underline flex items-center gap-0.5">
                 View all <ArrowUpRight className="h-3 w-3" />
@@ -165,16 +168,17 @@ export default function Dashboard() {
               {boards.length === 0 ? (
                 <div className="flex flex-col items-center py-8 text-center">
                   <span className="text-3xl mb-2">📋</span>
-                  <p className="text-sm font-medium">No boards yet</p>
-                  <p className="text-xs text-muted-foreground mt-1">Create your first board to start tracking progress.</p>
+                  <p className="text-sm font-medium">No workflows yet</p>
+                  <p className="text-xs text-muted-foreground mt-1">Create your first workflow to start tracking execution.</p>
                   <Link to="/boards">
-                    <Button size="sm" variant="outline" className="mt-4 gap-2"><Plus className="h-3.5 w-3.5" /> Create Board</Button>
+                    <Button size="sm" variant="outline" className="mt-4 gap-2"><Plus className="h-3.5 w-3.5" /> Create Workflow</Button>
                   </Link>
                 </div>
               ) : (
                 boards.map((b) => {
                   const boardTasks = tasks.filter(t => t.boardId === b.id);
                   const done = boardTasks.filter(t => t.status === 'done').length;
+                  const blocked = boardTasks.filter(t => t.blocked && t.status !== 'done').length;
                   const pct = boardTasks.length ? Math.round((done / boardTasks.length) * 100) : 0;
                   return (
                     <Link to={`/boards/${b.id}`} key={b.id} className="block group">
@@ -182,6 +186,9 @@ export default function Dashboard() {
                         <div className="flex items-center gap-2 min-w-0">
                           <span className="text-sm">{b.icon}</span>
                           <span className="text-sm font-medium truncate group-hover:text-primary transition-colors">{b.title}</span>
+                          {blocked > 0 && (
+                            <span className="text-[10px] font-semibold text-destructive bg-destructive/10 rounded-full px-1.5 py-0.5">{blocked} blocked</span>
+                          )}
                         </div>
                         <span className="text-xs text-muted-foreground tabular-nums">{done}/{boardTasks.length}</span>
                       </div>
@@ -196,10 +203,55 @@ export default function Dashboard() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
+        {/* Blocked & At Risk */}
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.35 }}>
+          <Card className="glass-card">
+            <CardHeader><CardTitle className="text-base flex items-center gap-2"><ShieldAlert className="h-4 w-4 text-destructive" /> Blocked & At Risk</CardTitle></CardHeader>
+            <CardContent>
+              {blockedTasks.length === 0 && overdueTasks.length === 0 ? (
+                <div className="flex flex-col items-center py-8 text-center">
+                  <span className="text-3xl mb-2">✅</span>
+                  <p className="text-sm font-medium">No blockers right now</p>
+                  <p className="text-xs text-muted-foreground mt-1">All tasks are moving. Nice.</p>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {blockedTasks.map((t) => (
+                    <div key={t.id} className="flex items-start gap-3 rounded-lg bg-destructive/5 border border-destructive/10 px-3 py-2.5">
+                      <ShieldAlert className="h-4 w-4 text-destructive mt-0.5 flex-shrink-0" />
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium truncate">{t.title}</p>
+                        {t.blockedReason && <p className="text-xs text-destructive/80 mt-0.5">{t.blockedReason}</p>}
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="text-[10px] text-muted-foreground">{boards.find(b => b.id === t.boardId)?.title}</span>
+                          {t.assignee && <span className="text-[10px] text-muted-foreground flex items-center gap-0.5"><UserCircle className="h-2.5 w-2.5" />{t.assignee}</span>}
+                        </div>
+                      </div>
+                      <Badge variant="outline" className="text-[10px] font-semibold border-destructive/20 text-destructive flex-shrink-0">Blocked</Badge>
+                    </div>
+                  ))}
+                  {overdueTasks.filter(t => !t.blocked).map((t) => (
+                    <div key={t.id} className="flex items-center justify-between rounded-lg bg-destructive/[0.03] border border-destructive/10 px-3 py-2.5">
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium truncate">{t.title}</p>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <span className="text-[10px] text-muted-foreground">{boards.find(b => b.id === t.boardId)?.title}</span>
+                          {t.assignee && <span className="text-[10px] text-muted-foreground flex items-center gap-0.5"><UserCircle className="h-2.5 w-2.5" />{t.assignee}</span>}
+                        </div>
+                      </div>
+                      <Badge variant="outline" className="text-[10px] font-semibold border-destructive/20 text-destructive flex-shrink-0">Overdue</Badge>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
+
         {/* Upcoming Deadlines */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.4 }}>
           <Card className="glass-card">
-            <CardHeader><CardTitle className="text-base flex items-center gap-2"><Clock className="h-4 w-4 text-accent" /> Upcoming Deadlines</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="text-base flex items-center gap-2"><Clock className="h-4 w-4 text-accent" /> Delivery Timeline</CardTitle></CardHeader>
             <CardContent>
               {upcoming.length === 0 ? (
                 <div className="flex flex-col items-center py-8 text-center">
@@ -217,7 +269,10 @@ export default function Dashboard() {
                       }`}>
                         <div className="min-w-0">
                           <p className="text-sm font-medium truncate">{t.title}</p>
-                          <p className="text-xs text-muted-foreground">{boards.find(b => b.id === t.boardId)?.title}</p>
+                          <div className="flex items-center gap-2 mt-0.5">
+                            <p className="text-xs text-muted-foreground">{boards.find(b => b.id === t.boardId)?.title}</p>
+                            {t.assignee && <span className="text-[10px] text-muted-foreground flex items-center gap-0.5"><UserCircle className="h-2.5 w-2.5" />{t.assignee}</span>}
+                          </div>
                         </div>
                         <div className="flex items-center gap-2 flex-shrink-0">
                           <Badge variant="outline" className="text-[10px] font-semibold">{PRIORITY_LABELS[t.priority]}</Badge>
@@ -233,41 +288,41 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         </motion.div>
-
-        {/* Recent Activity */}
-        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.5 }}>
-          <Card className="glass-card">
-            <CardHeader><CardTitle className="text-base flex items-center gap-2"><Activity className="h-4 w-4 text-primary" /> Recent Activity</CardTitle></CardHeader>
-            <CardContent>
-              {comments.length === 0 ? (
-                <div className="flex flex-col items-center py-8 text-center">
-                  <span className="text-3xl mb-2">💬</span>
-                  <p className="text-sm font-medium">No activity yet</p>
-                  <p className="text-xs text-muted-foreground mt-1">Comments on tasks will appear here.</p>
-                </div>
-              ) : (
-                <div className="space-y-2">
-                  {comments.slice(-5).reverse().map((c) => {
-                    const task = tasks.find(t => t.id === c.taskId);
-                    return (
-                      <div key={c.id} className="flex items-start gap-3 rounded-lg bg-secondary/40 px-3 py-2.5">
-                        <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary flex-shrink-0">
-                          {c.authorName.split(' ').map(n => n[0]).join('')}
-                        </div>
-                        <div className="min-w-0">
-                          <p className="text-sm"><span className="font-semibold">{c.authorName}</span> on <span className="font-medium">{task?.title}</span></p>
-                          <p className="text-xs text-muted-foreground mt-0.5 truncate">"{c.content}"</p>
-                          <p className="text-[10px] text-muted-foreground/70 mt-1">{formatRelativeDate(c.createdAt)}</p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </motion.div>
       </div>
+
+      {/* Recent Activity */}
+      <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.5 }}>
+        <Card className="glass-card">
+          <CardHeader><CardTitle className="text-base flex items-center gap-2"><Activity className="h-4 w-4 text-primary" /> Team Activity</CardTitle></CardHeader>
+          <CardContent>
+            {comments.length === 0 ? (
+              <div className="flex flex-col items-center py-8 text-center">
+                <span className="text-3xl mb-2">💬</span>
+                <p className="text-sm font-medium">No activity yet</p>
+                <p className="text-xs text-muted-foreground mt-1">Comments and updates will appear here.</p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {comments.slice(-5).reverse().map((c) => {
+                  const task = tasks.find(t => t.id === c.taskId);
+                  return (
+                    <div key={c.id} className="flex items-start gap-3 rounded-lg bg-secondary/40 px-3 py-2.5">
+                      <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary flex-shrink-0">
+                        {c.authorName.split(' ').map(n => n[0]).join('')}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-sm"><span className="font-semibold">{c.authorName}</span> on <span className="font-medium">{task?.title}</span></p>
+                        <p className="text-xs text-muted-foreground mt-0.5 truncate">"{c.content}"</p>
+                        <p className="text-[10px] text-muted-foreground/70 mt-1">{formatRelativeDate(c.createdAt)}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </motion.div>
     </div>
   );
 }

@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { DragDropContext, Droppable, Draggable, type DropResult } from '@hello-pangea/dnd';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, ArrowLeft, Search, Filter, Calendar, Tag, MessageSquare, Clock, GripVertical, Inbox, Trash2, Pencil } from 'lucide-react';
+import { Plus, ArrowLeft, Search, Filter, Calendar, Tag, MessageSquare, Clock, GripVertical, Inbox, Trash2, Pencil, ShieldAlert, UserCircle } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -197,7 +197,7 @@ export default function BoardDetail() {
                                     snap.isDragging
                                       ? 'shadow-xl ring-2 ring-primary/20 rotate-[2deg] scale-[1.02]'
                                       : 'hover:shadow-md hover:border-border'
-                                  } ${urgency === 'overdue' ? 'border-destructive/20 bg-destructive/[0.02]' : ''} ${isUrgentPriority ? 'ring-1 ring-priority-urgent/15' : ''}`}
+                                  } ${urgency === 'overdue' ? 'border-destructive/20 bg-destructive/[0.02]' : ''} ${isUrgentPriority ? 'ring-1 ring-priority-urgent/15' : ''} ${task.blocked ? 'border-destructive/25 bg-destructive/[0.03]' : ''}`}
                                 >
                                   <div className="flex items-start gap-2">
                                     <div
@@ -208,6 +208,11 @@ export default function BoardDetail() {
                                     </div>
                                     <div className="flex-1 min-w-0">
                                       <p className="text-sm font-semibold mb-1 line-clamp-2 leading-snug">{task.title}</p>
+                                      {task.blocked && (
+                                        <div className="flex items-center gap-1 mb-1.5 text-[10px] font-semibold text-destructive">
+                                          <ShieldAlert className="h-3 w-3" /> Blocked
+                                        </div>
+                                      )}
                                       {task.description && <p className="text-xs text-muted-foreground line-clamp-1 mb-2">{task.description}</p>}
                                       <div className="flex items-center gap-1.5 flex-wrap">
                                         <span className={`text-[10px] font-bold uppercase rounded-md px-1.5 py-0.5 ${PRIORITY_BG[task.priority]}`}>
@@ -231,6 +236,11 @@ export default function BoardDetail() {
                                               <Tag className="h-2 w-2" />{tag}
                                             </span>
                                           ))}
+                                        </div>
+                                      )}
+                                      {task.assignee && (
+                                        <div className="flex items-center gap-1 mt-2 text-[10px] text-muted-foreground">
+                                          <UserCircle className="h-3 w-3" />{task.assignee}
                                         </div>
                                       )}
                                     </div>

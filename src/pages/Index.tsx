@@ -1,16 +1,16 @@
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Zap, LayoutDashboard, CheckCircle2, Users, ArrowRight, Columns3, Shield, Sparkles, TrendingUp, Globe } from 'lucide-react';
+import { Zap, LayoutDashboard, CheckCircle2, Users, ArrowRight, Columns3, Shield, Activity, TrendingUp, Globe, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useRef } from 'react';
 
 const features = [
-  { icon: Columns3, title: 'Visual Kanban Boards', desc: 'Drag-and-drop task management with real-time status columns. Move work forward visually.' },
-  { icon: CheckCircle2, title: 'Smart Task Tracking', desc: 'Priorities, due dates, tags, and threaded comments — everything in one place.' },
-  { icon: Users, title: 'Team Collaboration', desc: 'Comment threads, activity feeds, and shared boards keep everyone aligned.' },
-  { icon: Shield, title: 'Secure by Default', desc: 'JWT authentication, protected routes, and encrypted storage from day one.' },
-  { icon: LayoutDashboard, title: 'Live Dashboard', desc: 'Real-time stats, completion charts, and activity summaries at a glance.' },
-  { icon: Sparkles, title: 'Premium Dark Mode', desc: 'A carefully crafted dark theme that looks stunning — not just inverted colors.' },
+  { icon: Columns3, title: 'Workflow Boards', desc: 'Visual task flow across statuses. See what\'s moving, what\'s stuck, and what\'s shipping.' },
+  { icon: AlertTriangle, title: 'Blocker Visibility', desc: 'Blocked tasks surface immediately so nothing stalls delivery silently.' },
+  { icon: Activity, title: 'Execution Dashboard', desc: 'Completion rates, delivery risk, and workload signals -- not vanity metrics.' },
+  { icon: Users, title: 'Team Ownership', desc: 'Every task has an owner. Know who\'s carrying what and where handoffs happen.' },
+  { icon: Shield, title: 'Secure by Default', desc: 'Authentication, protected routes, and scoped access from day one.' },
+  { icon: LayoutDashboard, title: 'Dark Mode', desc: 'A carefully crafted dark theme that looks stunning -- not just inverted colors.' },
 ];
 
 const fadeUp = { hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } };
@@ -47,25 +47,20 @@ export default function LandingPage() {
       {/* Hero */}
       <section ref={heroRef} className="relative flex flex-col items-center justify-center px-4 pt-28 sm:pt-36 pb-8 text-center">
         <motion.div style={{ y: heroY, opacity: heroOpacity }}>
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={stagger}
-            className="mx-auto max-w-3xl"
-          >
+          <motion.div initial="hidden" animate="visible" variants={stagger} className="mx-auto max-w-3xl">
             <motion.div variants={fadeUp} className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-semibold text-primary">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
               </span>
-              Now available — free to use
+              Workflow execution for small teams
             </motion.div>
             <motion.h1 variants={fadeUp} className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl xl:text-7xl leading-[1.1]">
-              Ship projects with
-              <span className="gradient-text block mt-1">clarity & momentum.</span>
+              Keep work moving.
+              <span className="gradient-text block mt-1">Surface what's stuck.</span>
             </motion.h1>
             <motion.p variants={fadeUp} className="mx-auto mt-6 max-w-xl text-base sm:text-lg text-muted-foreground leading-relaxed">
-              The project board built for makers who care about craft. Track tasks, visualize progress, and hit every deadline — beautifully.
+              RoomPulse gives your team clear task flow, blocker visibility, and delivery awareness — so nothing stalls without anyone noticing.
             </motion.p>
             <motion.div variants={fadeUp} className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
               <Link to="/signup">
@@ -109,7 +104,7 @@ export default function LandingPage() {
               </div>
               <div className="flex-1 mx-8">
                 <div className="mx-auto max-w-md rounded-md bg-background/80 border border-border/40 px-4 py-1.5 text-xs text-muted-foreground text-center">
-                  app.roompulse.dev/boards
+                  app.roompulse.dev/workflows
                 </div>
               </div>
             </div>
@@ -124,7 +119,7 @@ export default function LandingPage() {
                   <span className="text-sm font-bold">RoomPulse</span>
                 </div>
                 <div className="space-y-1">
-                  {['Dashboard', 'Boards', 'Profile'].map((item, i) => (
+                  {['Overview', 'Workflows', 'Profile'].map((item, i) => (
                     <div key={item} className={`rounded-lg px-3 py-2 text-xs font-medium ${i === 1 ? 'bg-primary/10 text-primary' : 'text-muted-foreground'}`}>
                       {item}
                     </div>
@@ -135,15 +130,16 @@ export default function LandingPage() {
               <div className="flex-1 p-4 sm:p-6 overflow-hidden">
                 <div className="flex items-center gap-3 mb-4">
                   <span className="text-lg">🚀</span>
-                  <span className="text-sm font-bold">Product Launch</span>
+                  <span className="text-sm font-bold">Q2 Product Launch</span>
                   <span className="text-[10px] bg-secondary px-2 py-0.5 rounded-full text-muted-foreground">8 tasks</span>
+                  <span className="text-[10px] bg-destructive/10 text-destructive px-2 py-0.5 rounded-full font-medium">1 blocked</span>
                 </div>
                 <div className="flex gap-3 h-full">
                   {[
-                    { title: 'To Do', color: 'bg-status-todo', tasks: ['Setup CI/CD pipeline', 'Write API docs'] },
-                    { title: 'In Progress', color: 'bg-status-progress', tasks: ['Design landing page', 'Build auth flow'] },
+                    { title: 'To Do', color: 'bg-status-todo', tasks: ['Set up staging env', 'Write migration scripts'] },
+                    { title: 'In Progress', color: 'bg-status-progress', tasks: ['Build onboarding flow', 'Auth redirect fix'] },
                     { title: 'Review', color: 'bg-status-review', tasks: ['Pricing page copy'] },
-                    { title: 'Done', color: 'bg-status-done', tasks: ['Define timeline'] },
+                    { title: 'Done', color: 'bg-status-done', tasks: ['Lock release scope'] },
                   ].map((col) => (
                     <div key={col.title} className="flex-1 min-w-0">
                       <div className="flex items-center gap-1.5 mb-2">
@@ -166,7 +162,6 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
-          {/* Reflection gradient */}
           <div className="absolute -bottom-px left-[10%] right-[10%] h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
         </motion.div>
       </section>
@@ -174,17 +169,13 @@ export default function LandingPage() {
       {/* Features */}
       <section className="mx-auto max-w-6xl px-4 sm:px-6 py-20 sm:py-28">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-16">
-          <span className="text-xs font-semibold uppercase tracking-widest text-primary mb-3 block">Features</span>
-          <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">Everything you need,<br className="hidden sm:block" /> nothing you don't.</h2>
-          <p className="mt-4 text-muted-foreground max-w-lg mx-auto text-base">Streamlined project management with the polish of a premium product.</p>
+          <span className="text-xs font-semibold uppercase tracking-widest text-primary mb-3 block">Capabilities</span>
+          <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">Built for teams<br className="hidden sm:block" /> that ship.</h2>
+          <p className="mt-4 text-muted-foreground max-w-lg mx-auto text-base">Visibility into what's moving, what's stuck, and who owns what — without the overhead.</p>
         </motion.div>
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((f) => (
-            <motion.div
-              key={f.title}
-              variants={fadeUp}
-              className="group glass-card-hover rounded-xl p-6 sm:p-7"
-            >
+            <motion.div key={f.title} variants={fadeUp} className="group glass-card-hover rounded-xl p-6 sm:p-7">
               <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 group-hover:bg-primary/15 transition-colors">
                 <f.icon className="h-5 w-5 text-primary" />
               </div>
@@ -200,13 +191,13 @@ export default function LandingPage() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-16">
             <span className="text-xs font-semibold uppercase tracking-widest text-primary mb-3 block">How it works</span>
-            <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">From idea to shipped in three steps.</h2>
+            <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">From planning to shipped — with full visibility.</h2>
           </motion.div>
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="grid gap-8 sm:grid-cols-3">
             {[
-              { step: '01', icon: Columns3, title: 'Create a board', desc: 'Set up boards for each project, team, or workflow. Customize with icons and colors.' },
-              { step: '02', icon: TrendingUp, title: 'Track progress', desc: 'Drag tasks through columns, set priorities and deadlines, and watch progress unfold.' },
-              { step: '03', icon: Globe, title: 'Ship with confidence', desc: 'Use the dashboard to spot blockers, review activity, and keep shipping.' },
+              { step: '01', icon: Columns3, title: 'Define your workflow', desc: 'Create boards for each initiative, team, or sprint. Assign owners and set delivery dates.' },
+              { step: '02', icon: TrendingUp, title: 'Track execution', desc: 'Move tasks through stages, flag blockers, and monitor delivery risk as work progresses.' },
+              { step: '03', icon: Globe, title: 'Ship with awareness', desc: 'Use the execution dashboard to surface stalled work, overdue items, and workload imbalances.' },
             ].map((s) => (
               <motion.div key={s.step} variants={fadeUp} className="text-center sm:text-left">
                 <span className="text-5xl font-extrabold text-primary/10 block mb-3">{s.step}</span>
@@ -227,8 +218,8 @@ export default function LandingPage() {
           <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
             <Zap className="h-7 w-7 text-primary" />
           </div>
-          <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">Ready to build momentum?</h2>
-          <p className="mt-4 text-muted-foreground text-base sm:text-lg max-w-md mx-auto">Start managing your projects in seconds. Free forever for individuals.</p>
+          <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">Stop managing tasks.<br />Start shipping work.</h2>
+          <p className="mt-4 text-muted-foreground text-base sm:text-lg max-w-md mx-auto">Give your team the visibility to move faster and the awareness to catch problems early.</p>
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
             <Link to="/signup">
               <Button size="lg" className="gap-2 px-8 h-12 text-base shadow-xl shadow-primary/25">
@@ -252,7 +243,7 @@ export default function LandingPage() {
                 <span className="text-sm font-bold">RoomPulse</span>
               </div>
               <p className="text-xs text-muted-foreground max-w-xs leading-relaxed">
-                A premium project management tool built for small teams and creators who care about craft.
+                Workflow execution and delivery visibility for teams that care about shipping, not just tracking.
               </p>
             </div>
             <div className="flex gap-12 text-sm">
