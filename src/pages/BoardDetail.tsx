@@ -197,7 +197,7 @@ export default function BoardDetail() {
                                     snap.isDragging
                                       ? 'shadow-xl ring-2 ring-primary/20 rotate-[2deg] scale-[1.02]'
                                       : 'hover:shadow-md hover:border-border'
-                                  } ${urgency === 'overdue' ? 'border-destructive/20 bg-destructive/[0.02]' : ''} ${isUrgentPriority ? 'ring-1 ring-priority-urgent/15' : ''}`}
+                                  } ${urgency === 'overdue' ? 'border-destructive/20 bg-destructive/[0.02]' : ''} ${isUrgentPriority ? 'ring-1 ring-priority-urgent/15' : ''} ${task.blocked ? 'border-destructive/25 bg-destructive/[0.03]' : ''}`}
                                 >
                                   <div className="flex items-start gap-2">
                                     <div
