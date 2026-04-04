@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { DragDropContext, Droppable, Draggable, type DropResult } from '@hello-pangea/dnd';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, ArrowLeft, Search, Filter, Calendar, Tag, MessageSquare, Clock, GripVertical, Inbox, Trash2, Pencil } from 'lucide-react';
+import { Plus, ArrowLeft, Search, Filter, Calendar, Tag, MessageSquare, Clock, GripVertical, Inbox, Trash2, Pencil, ShieldAlert, UserCircle } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
