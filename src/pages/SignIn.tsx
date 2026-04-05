@@ -59,7 +59,7 @@ export default function SignIn() {
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-sm space-y-6">
           <div className="text-center lg:text-left">
             <Link to="/" className="inline-flex items-center gap-2 mb-6 lg:hidden">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary"><Zap className="h-4 w-4 text-primary-foreground" /></div>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary"><Activity className="h-4 w-4 text-primary-foreground" /></div>
               <span className="text-lg font-bold">RoomPulse</span>
             </Link>
             <h1 className="text-2xl font-extrabold tracking-tight">Welcome back</h1>
