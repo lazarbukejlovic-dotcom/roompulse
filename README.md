@@ -1,132 +1,95 @@
 # RoomPulse
 
-Modern task and board management for small teams, creators, and freelancers.
+RoomPulse is a workflow execution platform built around visibility: blockers, priorities, active work, and delivery progress.
 
-RoomPulse is a clean SaaS-style project management app designed to help users organize work visually with Kanban boards, smart task tracking, and a polished dashboard experience.
+The project was designed to feel faster, clearer, and more focused than a generic task dashboard.
 
 ## Overview
 
-RoomPulse was built around a simple idea: many project management tools feel either too complex or too limited. This project aims to sit in the middle — offering a modern, user-friendly experience with enough structure for real workflows while staying simple and approachable.
+RoomPulse started from a simple product idea: teams do better work when the interface makes execution visible.
 
-The app includes boards, task management, dashboard analytics, comments, filters, dark mode, and responsive layouts, all presented in a clean product-style interface.
+That means the product is not just about storing tasks.  
+It is about helping users understand:
+- what is moving
+- what is blocked
+- what is overdue
+- what needs attention now
+- where work is slipping
 
-## Features
+That gives the app a more active and operational feel than a standard project board.
 
-- Kanban-style board management
-- Drag-and-drop task organization
-- Task priorities, due dates, and tags
-- Dashboard with progress and activity insights
-- Comments and collaboration flow
-- Search and filtering
-- Dark mode support
-- Skeleton loading states
-- Error handling states
-- Responsive design for desktop, tablet, and mobile
-- Human-readable relative dates
+## Core Features
 
-## Tech Stack
+- Track work through a structured workflow interface
+- Surface priorities, blockers, and active delivery state
+- Use a more execution-focused dashboard instead of a passive summary page
+- Review workflow information through a cleaner, more product-oriented UI
+- Explore an interface designed to feel fast, focused, and operational
+- Use the product on desktop and mobile without losing clarity
 
-- **Frontend:** React, TypeScript
-- **Styling:** Tailwind CSS, shadcn/ui
-- **State Management:** Zustand
-- **Server State / Data Fetching:** TanStack React Query
-- **Routing:** React Router
-- **Charts:** Recharts
-- **Drag and Drop:** @hello-pangea/dnd
-- **Animations:** Framer Motion
-- **Date Utilities:** date-fns
-- **Build Tool:** Vite
+## Product Focus
+
+RoomPulse is centered on execution.
+
+The project was shaped around the idea that a workflow tool should not just look organized — it should make work easier to read.
+
+That led to a stronger focus on:
+- priorities
+- due work
+- visibility of blocked tasks
+- ownership and activity
+- cleaner dashboard structure
+- faster internal product rhythm
+
+## Why it stands out
+
+RoomPulse is stronger than a generic productivity clone because it leans harder into product clarity.
+
+Instead of relying on visual polish alone, it tries to build a clearer internal workflow tool through:
+- denser operational context
+- cleaner execution states
+- stronger dashboard signals
+- a more active, less passive product feel
+
+That makes it feel more like a real workflow product and less like a basic task board demo.
+
+## Design Direction
+
+One of the goals of RoomPulse was to avoid the safe, repetitive modern SaaS template feeling.
+
+The product uses a sharper workflow identity and a more focused internal-tool tone so it does not read like a second version of a business dashboard.
+
+## Mobile Experience
+
+RoomPulse was also shaped with mobile responsiveness in mind:
+- task and workflow information remains readable
+- dashboard sections stay usable
+- spacing holds together on smaller screens
+- the product keeps its structure without becoming crowded
+
+## What this project was meant to prove
+
+With RoomPulse, the goal was to show:
+- stronger product thinking in a workflow context
+- better clarity in internal tools
+- a more distinctive execution-focused app
+- portfolio work that feels intentional rather than generic
 
 ## Screenshots
 
-A quick look at the RoomPulse interface, including the landing page, dashboard, and project view.
+Add your final screenshots here.
 
-### Landing Page
-![RoomPulse Landing Page](./Screenshot%202026-04-01%20192311.png)
-
-### Dashboard
-![RoomPulse Dashboard](./Screenshot%202026-04-01%20192546.png)
-
-### Project Page
-![RoomPulse Project Page](./Screenshot%202026-04-01%20192649.png)
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18 or higher
-- npm, pnpm, or bun
-
-### Installation
-
-    git clone https://github.com/lazarbukeljovic-dotcom/pulse-board-flow.git
-    cd pulse-board-flow
-    npm install
-
-### Run Locally
-
-    npm run dev
-
-### Build for Production
-
-    npm run build
-    npm run preview
-
-## Project Structure
-
-    src/
-    ├── components/
-    ├── hooks/
-    ├── lib/
-    ├── pages/
-    ├── store/
-    ├── types/
-    └── main.tsx
-
-## What I Focused On
-
-While building RoomPulse, I mainly focused on:
-
-- creating a clean and modern SaaS-style UI
-- improving UX with better spacing, hierarchy, and readability
-- making the dashboard feel more complete and useful
-- building reusable components
-- adding polished product details such as skeleton loaders, error states, and relative dates
-- keeping the project responsive across screen sizes
-
-## Future Improvements
-
-Possible future improvements include:
-
-- backend integration with persistent data storage
-- authentication with real user accounts
-- real-time collaboration
-- command palette for faster navigation
-- global search across boards and tasks
-- activity log and audit trail
-- role-based access control
-
-## Lessons Learned
-
-This project helped me improve my skills in:
-
-- building a multi-page React application
-- structuring components more clearly
-- improving UI consistency
-- creating better loading and error states
-- balancing clean design with practical functionality
-- thinking more about product quality, not just features
+![RoomPulse Dashboard](./screenshots/roompulse-dashboard.png)
+![RoomPulse Workflow](./screenshots/roompulse-workflow.png)
+![RoomPulse Activity](./screenshots/roompulse-activity.png)
+![RoomPulse Mobile](./screenshots/roompulse-mobile.png)
 
 ## Live Demo
 
-[View Live Demo](https://roompulse.lovable.app/)
+**Live:**   https://roompulse.lovable.app/
 
-## Repository
-
-[GitHub Repository](https://github.com/lazarbukejlovic-dotcom/roompulse)
+**Repository:** `<REPOSITORY_LINK>`
 
 ## Author
 
-Built by Lazar Bukejlovic
-
-- GitHub: [lazarbukeljovic-dotcom](https://github.com/lazarbukeljovic-dotcom)
+**Lazar Bukejlovic**
