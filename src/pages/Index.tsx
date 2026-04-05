@@ -1,28 +1,28 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Zap, Columns3, Shield, Activity, ArrowRight, AlertTriangle, Users } from 'lucide-react';
+import { Activity, Columns3, Shield, ArrowRight, AlertTriangle, Users, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const features = [
-  { icon: Columns3, title: 'Workflow Boards', desc: 'Visual task flow across statuses. See what\'s moving, what\'s stuck, and what needs attention.' },
+  { icon: Columns3, title: 'Workflow Lanes', desc: 'Visual task flow across statuses. See what\'s moving, what\'s stuck, and what needs attention.' },
   { icon: AlertTriangle, title: 'Blocker Visibility', desc: 'Blocked tasks surface immediately — nothing stalls without the team knowing.' },
-  { icon: Activity, title: 'Execution Overview', desc: 'Completion rates, delivery risk, and ownership signals. Not vanity metrics.' },
+  { icon: Clock, title: 'Delivery Timeline', desc: 'Due dates, overdue work, and at-risk items — all in one view.' },
   { icon: Users, title: 'Team Ownership', desc: 'Every task has an owner. Know who\'s carrying what and where handoffs happen.' },
   { icon: Shield, title: 'Secure by Default', desc: 'Authentication, protected routes, and scoped access from the start.' },
 ];
 
-const fadeUp = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
-const stagger = { visible: { transition: { staggerChildren: 0.07 } } };
+const fadeUp = { hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } };
+const stagger = { visible: { transition: { staggerChildren: 0.06 } } };
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background overflow-hidden">
       {/* Nav */}
-      <nav className="fixed top-0 inset-x-0 z-50 border-b border-border/40 bg-background/70 backdrop-blur-2xl">
+      <nav className="fixed top-0 inset-x-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4 sm:px-6">
           <Link to="/" className="flex items-center gap-2">
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary shadow-lg shadow-primary/20">
-              <Zap className="h-3.5 w-3.5 text-primary-foreground" />
+              <Activity className="h-3.5 w-3.5 text-primary-foreground" />
             </div>
             <span className="text-base font-bold tracking-tight">RoomPulse</span>
           </Link>
@@ -52,7 +52,7 @@ export default function LandingPage() {
             <span className="gradient-text block mt-1">Surface what's stuck.</span>
           </motion.h1>
           <motion.p variants={fadeUp} className="mx-auto mt-5 max-w-md text-sm sm:text-base text-muted-foreground leading-relaxed">
-            Clear task flow, blocker visibility, and delivery awareness for teams that ship — so nothing stalls without anyone noticing.
+            Task flow, blocker visibility, and delivery awareness for teams that ship — so nothing stalls without anyone noticing.
           </motion.p>
           <motion.div variants={fadeUp} className="mt-7 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <Link to="/signup">
@@ -70,15 +70,16 @@ export default function LandingPage() {
         <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 h-[400px] w-[600px] rounded-full bg-primary/8 blur-[100px]" />
       </section>
 
-      {/* Product Mockup — simplified, no heavy scroll transforms */}
+      {/* Product Mockup */}
       <section className="relative mx-auto max-w-5xl px-4 sm:px-6 pb-16">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="rounded-xl border border-border/60 bg-card shadow-2xl shadow-black/10 dark:shadow-black/40 overflow-hidden">
+            {/* Browser chrome */}
             <div className="flex items-center gap-2 border-b border-border/60 bg-muted/50 px-4 py-2.5">
               <div className="flex gap-1.5">
                 <div className="h-2.5 w-2.5 rounded-full bg-destructive/60" />
@@ -91,11 +92,13 @@ export default function LandingPage() {
                 </div>
               </div>
             </div>
+            {/* App preview */}
             <div className="flex h-[260px] sm:h-[360px] lg:h-[400px]">
+              {/* Sidebar */}
               <div className="hidden sm:flex w-44 flex-col border-r border-border/40 bg-muted/30 p-3">
                 <div className="flex items-center gap-2 mb-5">
                   <div className="h-6 w-6 rounded-lg bg-primary flex items-center justify-center">
-                    <Zap className="h-3 w-3 text-primary-foreground" />
+                    <Activity className="h-3 w-3 text-primary-foreground" />
                   </div>
                   <span className="text-xs font-bold">RoomPulse</span>
                 </div>
@@ -107,6 +110,7 @@ export default function LandingPage() {
                   ))}
                 </div>
               </div>
+              {/* Board content */}
               <div className="flex-1 p-3 sm:p-5 overflow-hidden">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-base">🚀</span>
@@ -145,11 +149,30 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
+      {/* Operational metrics strip */}
+      <section className="border-y border-border/40 bg-muted/20 py-8 sm:py-10">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
+            {[
+              { value: '4', label: 'Active workflows' },
+              { value: '10', label: 'Tasks tracked' },
+              { value: '2', label: 'Blocked items' },
+              { value: '60%', label: 'Completion rate' },
+            ].map((m) => (
+              <div key={m.label}>
+                <p className="text-2xl sm:text-3xl font-extrabold tracking-tight">{m.value}</p>
+                <p className="text-[11px] text-muted-foreground mt-1">{m.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Features */}
-      <section className="mx-auto max-w-5xl px-4 sm:px-6 py-16 sm:py-24">
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-12">
-          <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl lg:text-4xl">Built for teams that ship.</h2>
-          <p className="mt-3 text-muted-foreground max-w-md mx-auto text-sm">Visibility into what's moving, what's stuck, and who owns what — without the overhead.</p>
+      <section className="mx-auto max-w-5xl px-4 sm:px-6 py-16 sm:py-20">
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-10">
+          <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Execution visibility, not project decoration.</h2>
+          <p className="mt-3 text-muted-foreground max-w-md mx-auto text-sm">See what's moving, what's stuck, and who owns what — without the overhead.</p>
         </motion.div>
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((f) => (
@@ -165,9 +188,9 @@ export default function LandingPage() {
       </section>
 
       {/* CTA */}
-      <section className="border-t border-border/50 bg-muted/20 py-16 sm:py-24 px-4">
+      <section className="border-t border-border/50 bg-muted/20 py-14 sm:py-20 px-4">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="mx-auto max-w-xl text-center">
-          <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl lg:text-4xl">Stop managing tasks.<br />Start shipping work.</h2>
+          <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Stop tracking tasks.<br />Start shipping work.</h2>
           <p className="mt-3 text-muted-foreground text-sm sm:text-base max-w-sm mx-auto">Give your team the visibility to move faster and catch problems early.</p>
           <div className="mt-7">
             <Link to="/signup">
@@ -185,7 +208,7 @@ export default function LandingPage() {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-primary">
-                <Zap className="h-3 w-3 text-primary-foreground" />
+                <Activity className="h-3 w-3 text-primary-foreground" />
               </div>
               <span className="text-sm font-bold">RoomPulse</span>
             </div>

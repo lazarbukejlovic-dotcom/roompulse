@@ -4,82 +4,82 @@
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 220 30% 10%;
+    --background: 210 18% 97%;
+    --foreground: 220 35% 8%;
     --card: 0 0% 100%;
-    --card-foreground: 220 30% 10%;
+    --card-foreground: 220 35% 8%;
     --popover: 0 0% 100%;
-    --popover-foreground: 220 30% 10%;
-    --primary: 168 70% 38%;
+    --popover-foreground: 220 35% 8%;
+    --primary: 162 63% 32%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 210 15% 93%;
+    --secondary: 210 14% 91%;
     --secondary-foreground: 220 30% 15%;
-    --muted: 210 15% 95%;
-    --muted-foreground: 215 15% 46%;
-    --accent: 35 95% 55%;
-    --accent-foreground: 35 95% 15%;
+    --muted: 210 14% 93%;
+    --muted-foreground: 215 14% 44%;
+    --accent: 38 92% 50%;
+    --accent-foreground: 38 92% 14%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
-    --border: 214 20% 90%;
-    --input: 214 20% 88%;
-    --ring: 168 70% 38%;
+    --border: 214 18% 88%;
+    --input: 214 18% 86%;
+    --ring: 162 63% 32%;
     --radius: 0.625rem;
-    --sidebar-background: 210 15% 96%;
-    --sidebar-foreground: 220 25% 20%;
-    --sidebar-primary: 168 70% 38%;
+    --sidebar-background: 220 20% 95%;
+    --sidebar-foreground: 220 30% 14%;
+    --sidebar-primary: 162 63% 32%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 15% 92%;
-    --sidebar-accent-foreground: 220 25% 15%;
-    --sidebar-border: 214 20% 90%;
-    --sidebar-ring: 168 70% 38%;
+    --sidebar-accent: 210 14% 90%;
+    --sidebar-accent-foreground: 220 28% 12%;
+    --sidebar-border: 214 18% 88%;
+    --sidebar-ring: 162 63% 32%;
 
     --priority-urgent: 0 72% 51%;
     --priority-high: 25 95% 53%;
     --priority-medium: 45 93% 47%;
-    --priority-low: 168 70% 38%;
-    --status-todo: 215 15% 46%;
-    --status-progress: 210 80% 55%;
-    --status-review: 270 60% 55%;
-    --status-done: 145 65% 42%;
+    --priority-low: 162 63% 32%;
+    --status-todo: 215 14% 44%;
+    --status-progress: 210 78% 52%;
+    --status-review: 270 58% 52%;
+    --status-done: 152 60% 38%;
   }
 
   .dark {
-    --background: 224 30% 7%;
-    --foreground: 210 20% 93%;
-    --card: 224 25% 11%;
-    --card-foreground: 210 20% 93%;
-    --popover: 224 25% 11%;
-    --popover-foreground: 210 20% 93%;
-    --primary: 168 70% 48%;
-    --primary-foreground: 224 30% 7%;
-    --secondary: 224 20% 16%;
-    --secondary-foreground: 210 20% 88%;
-    --muted: 224 20% 15%;
-    --muted-foreground: 215 15% 55%;
-    --accent: 35 95% 55%;
-    --accent-foreground: 35 95% 10%;
-    --destructive: 0 62% 40%;
+    --background: 222 32% 6%;
+    --foreground: 210 18% 92%;
+    --card: 222 28% 10%;
+    --card-foreground: 210 18% 92%;
+    --popover: 222 28% 10%;
+    --popover-foreground: 210 18% 92%;
+    --primary: 162 60% 42%;
+    --primary-foreground: 222 32% 6%;
+    --secondary: 222 22% 14%;
+    --secondary-foreground: 210 18% 86%;
+    --muted: 222 22% 13%;
+    --muted-foreground: 215 14% 52%;
+    --accent: 38 92% 52%;
+    --accent-foreground: 38 92% 10%;
+    --destructive: 0 62% 42%;
     --destructive-foreground: 0 0% 100%;
-    --border: 224 20% 18%;
-    --input: 224 20% 20%;
-    --ring: 168 70% 48%;
-    --sidebar-background: 224 28% 9%;
-    --sidebar-foreground: 210 20% 85%;
-    --sidebar-primary: 168 70% 48%;
-    --sidebar-primary-foreground: 224 30% 7%;
-    --sidebar-accent: 224 20% 14%;
-    --sidebar-accent-foreground: 210 20% 88%;
-    --sidebar-border: 224 20% 16%;
-    --sidebar-ring: 168 70% 48%;
+    --border: 222 22% 16%;
+    --input: 222 22% 18%;
+    --ring: 162 60% 42%;
+    --sidebar-background: 222 30% 8%;
+    --sidebar-foreground: 210 18% 82%;
+    --sidebar-primary: 162 60% 42%;
+    --sidebar-primary-foreground: 222 32% 6%;
+    --sidebar-accent: 222 22% 12%;
+    --sidebar-accent-foreground: 210 18% 86%;
+    --sidebar-border: 222 22% 14%;
+    --sidebar-ring: 162 60% 42%;
 
     --priority-urgent: 0 72% 55%;
     --priority-high: 25 95% 58%;
     --priority-medium: 45 93% 52%;
-    --priority-low: 168 70% 48%;
-    --status-todo: 215 15% 55%;
-    --status-progress: 210 80% 60%;
-    --status-review: 270 60% 60%;
-    --status-done: 145 65% 48%;
+    --priority-low: 162 60% 42%;
+    --status-todo: 215 14% 52%;
+    --status-progress: 210 78% 58%;
+    --status-review: 270 58% 58%;
+    --status-done: 152 60% 44%;
   }
 }
 
@@ -91,7 +91,6 @@
     @apply bg-background text-foreground antialiased;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   }
-  /* Better focus states for accessibility */
   :focus-visible {
     @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
   }
@@ -113,7 +112,6 @@
   }
 }
 
-/* Smooth page transitions */
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;
