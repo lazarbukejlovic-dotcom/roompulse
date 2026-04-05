@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Zap } from 'lucide-react';
+import { ArrowLeft, Activity } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function NotFound() {
