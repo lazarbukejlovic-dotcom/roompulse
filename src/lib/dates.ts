@@ -32,14 +32,6 @@ export function formatDueDate(dateStr: string | null): string {
   return formatShortDate(dateStr);
 }
 
-/**
- * Check if a due date is overdue (past and not today)
- */
-export function isOverdue(dateStr: string | null): boolean {
-  if (!dateStr) return false;
-  const date = parseISO(dateStr.includes('T') ? dateStr : `${dateStr}T00:00:00`);
-  return isPast(date) && !isToday(date);
-}
 
 /**
  * Get urgency level for styling: 'overdue' | 'soon' | 'normal'

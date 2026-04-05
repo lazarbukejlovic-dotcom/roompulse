@@ -13,7 +13,7 @@ export default function NotFound() {
         className="max-w-md"
       >
         <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
-          <Zap className="h-7 w-7 text-primary" />
+          <Activity className="h-7 w-7 text-primary" />
         </div>
         <h1 className="text-7xl font-extrabold tracking-tighter gradient-text mb-4">404</h1>
         <p className="text-xl font-bold mb-2">Page not found</p>
