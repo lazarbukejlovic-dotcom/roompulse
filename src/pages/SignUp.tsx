@@ -31,7 +31,7 @@ export default function SignUp() {
       <div className="hidden lg:flex lg:w-1/2 flex-col justify-between bg-primary/5 border-r border-border/40 p-12">
         <Link to="/" className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary shadow-lg shadow-primary/20">
-            <Zap className="h-4 w-4 text-primary-foreground" />
+             <Activity className="h-4 w-4 text-primary-foreground" />
           </div>
           <span className="text-lg font-bold">RoomPulse</span>
         </Link>
