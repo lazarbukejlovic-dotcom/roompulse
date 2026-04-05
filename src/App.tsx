@@ -17,13 +17,19 @@ const NotFound = lazy(() => import('./pages/NotFound'));
 
 const queryClient = new QueryClient();
 
+const Spinner = () => (
+  <div className="flex h-screen items-center justify-center bg-background">
+    <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+  </div>
+);
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <ErrorBoundary>
         <Toaster />
         <BrowserRouter>
-          <Suspense fallback={<div className="flex h-screen items-center justify-center bg-background"><div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" /></div>}>
+          <Suspense fallback={<Spinner />}>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/signin" element={<SignIn />} />
