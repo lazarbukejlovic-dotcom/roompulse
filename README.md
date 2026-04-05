@@ -88,7 +88,7 @@ Add your final screenshots here.
 
 **Live:**   https://roompulse.lovable.app/
 
-**Repository:** `<REPOSITORY_LINK>`
+**Repository:** https://github.com/lazarbukejlovic-dotcom/roompulse
 
 ## Author
 
