@@ -1,16 +1,16 @@
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Zap, LayoutDashboard, CheckCircle2, Users, ArrowRight, Columns3, Shield, Activity, TrendingUp, Globe, AlertTriangle } from 'lucide-react';
+import { Zap, LayoutDashboard, Columns3, Shield, Activity, ArrowRight, AlertTriangle, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useRef } from 'react';
 
 const features = [
-  { icon: Columns3, title: 'Workflow Boards', desc: 'Visual task flow across statuses. See what\'s moving, what\'s stuck, and what\'s shipping.' },
-  { icon: AlertTriangle, title: 'Blocker Visibility', desc: 'Blocked tasks surface immediately so nothing stalls delivery silently.' },
-  { icon: Activity, title: 'Execution Dashboard', desc: 'Completion rates, delivery risk, and workload signals -- not vanity metrics.' },
-  { icon: Users, title: 'Team Ownership', desc: 'Every task has an owner. Know who\'s carrying what and where handoffs happen.' },
-  { icon: Shield, title: 'Secure by Default', desc: 'Authentication, protected routes, and scoped access from day one.' },
-  { icon: LayoutDashboard, title: 'Dark Mode', desc: 'A carefully crafted dark theme that looks stunning -- not just inverted colors.' },
+  { icon: Columns3, title: 'Workflow Boards', desc: 'Visual task flow across statuses. See what\'s moving, what\'s stuck, and what needs attention.' },
+  { icon: AlertTriangle, title: 'Blocker Visibility', desc: 'Blocked tasks surface immediately — nothing stalls delivery without the team knowing.' },
+  { icon: Activity, title: 'Execution Dashboard', desc: 'Completion rates, delivery risk, and workload distribution. Signal over noise.' },
+  { icon: Users, title: 'Team Ownership', desc: 'Every task has an owner. Know who\'s carrying what and where handoffs are happening.' },
+  { icon: Shield, title: 'Secure Access', desc: 'Authentication, protected routes, and scoped access built in from the start.' },
+  { icon: LayoutDashboard, title: 'Dark Mode', desc: 'A carefully tuned dark theme — not just inverted colors.' },
 ];
 
 const fadeUp = { hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } };
@@ -74,15 +74,11 @@ export default function LandingPage() {
                 </Button>
               </Link>
             </motion.div>
-            <motion.p variants={fadeUp} className="mt-4 text-xs text-muted-foreground">
-              No credit card required · Set up in 30 seconds
-            </motion.p>
           </motion.div>
         </motion.div>
 
         {/* Ambient glow */}
         <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 h-[600px] w-[900px] rounded-full bg-primary/8 blur-[120px]" />
-        <div className="pointer-events-none absolute top-40 left-1/4 h-[300px] w-[400px] rounded-full bg-accent/5 blur-[100px]" />
       </section>
 
       {/* Product Mockup */}
@@ -95,7 +91,7 @@ export default function LandingPage() {
           className="relative"
         >
           <div className="rounded-xl border border-border/60 bg-card shadow-2xl shadow-black/10 dark:shadow-black/40 overflow-hidden">
-            {/* Fake browser chrome */}
+            {/* Browser chrome */}
             <div className="flex items-center gap-2 border-b border-border/60 bg-muted/50 px-4 py-3">
               <div className="flex gap-1.5">
                 <div className="h-3 w-3 rounded-full bg-destructive/60" />
@@ -108,9 +104,8 @@ export default function LandingPage() {
                 </div>
               </div>
             </div>
-            {/* Fake app content */}
+            {/* App content mock */}
             <div className="flex h-[320px] sm:h-[420px] lg:h-[480px]">
-              {/* Sidebar mock */}
               <div className="hidden sm:flex w-52 flex-col border-r border-border/40 bg-muted/30 p-4">
                 <div className="flex items-center gap-2 mb-6">
                   <div className="h-7 w-7 rounded-lg bg-primary flex items-center justify-center">
@@ -126,7 +121,6 @@ export default function LandingPage() {
                   ))}
                 </div>
               </div>
-              {/* Main content mock - Kanban */}
               <div className="flex-1 p-4 sm:p-6 overflow-hidden">
                 <div className="flex items-center gap-3 mb-4">
                   <span className="text-lg">🚀</span>
@@ -162,14 +156,12 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
-          <div className="absolute -bottom-px left-[10%] right-[10%] h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
         </motion.div>
       </section>
 
       {/* Features */}
       <section className="mx-auto max-w-6xl px-4 sm:px-6 py-20 sm:py-28">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-16">
-          <span className="text-xs font-semibold uppercase tracking-widest text-primary mb-3 block">Capabilities</span>
           <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">Built for teams<br className="hidden sm:block" /> that ship.</h2>
           <p className="mt-4 text-muted-foreground max-w-lg mx-auto text-base">Visibility into what's moving, what's stuck, and who owns what — without the overhead.</p>
         </motion.div>
@@ -186,87 +178,38 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      {/* How it works */}
-      <section className="border-t border-border/50 bg-muted/20 py-20 sm:py-28">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-16">
-            <span className="text-xs font-semibold uppercase tracking-widest text-primary mb-3 block">How it works</span>
-            <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">From planning to shipped — with full visibility.</h2>
-          </motion.div>
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="grid gap-8 sm:grid-cols-3">
-            {[
-              { step: '01', icon: Columns3, title: 'Define your workflow', desc: 'Create boards for each initiative, team, or sprint. Assign owners and set delivery dates.' },
-              { step: '02', icon: TrendingUp, title: 'Track execution', desc: 'Move tasks through stages, flag blockers, and monitor delivery risk as work progresses.' },
-              { step: '03', icon: Globe, title: 'Ship with awareness', desc: 'Use the execution dashboard to surface stalled work, overdue items, and workload imbalances.' },
-            ].map((s) => (
-              <motion.div key={s.step} variants={fadeUp} className="text-center sm:text-left">
-                <span className="text-5xl font-extrabold text-primary/10 block mb-3">{s.step}</span>
-                <div className="flex items-center justify-center sm:justify-start gap-2 mb-2">
-                  <s.icon className="h-5 w-5 text-primary" />
-                  <h3 className="text-lg font-bold">{s.title}</h3>
-                </div>
-                <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
       {/* CTA */}
       <section className="border-t border-border/50 bg-muted/20 py-20 sm:py-28 px-4">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="mx-auto max-w-2xl text-center">
-          <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
-            <Zap className="h-7 w-7 text-primary" />
-          </div>
           <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">Stop managing tasks.<br />Start shipping work.</h2>
           <p className="mt-4 text-muted-foreground text-base sm:text-lg max-w-md mx-auto">Give your team the visibility to move faster and the awareness to catch problems early.</p>
-          <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+          <div className="mt-8">
             <Link to="/signup">
               <Button size="lg" className="gap-2 px-8 h-12 text-base shadow-xl shadow-primary/25">
                 Get Started Free <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
           </div>
-          <p className="mt-4 text-xs text-muted-foreground">No credit card · No setup · No friction</p>
         </motion.div>
       </section>
 
       {/* Footer */}
       <footer className="border-t border-border/50">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12">
-          <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
-            <div>
-              <div className="flex items-center gap-2.5 mb-3">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
-                  <Zap className="h-3.5 w-3.5 text-primary-foreground" />
-                </div>
-                <span className="text-sm font-bold">RoomPulse</span>
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
+                <Zap className="h-3.5 w-3.5 text-primary-foreground" />
               </div>
-              <p className="text-xs text-muted-foreground max-w-xs leading-relaxed">
-                Workflow execution and delivery visibility for teams that care about shipping, not just tracking.
-              </p>
+              <span className="text-sm font-bold">RoomPulse</span>
             </div>
-            <div className="flex gap-12 text-sm">
-              <div className="space-y-3">
-                <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Product</p>
-                <div className="space-y-2">
-                  <Link to="/signup" className="block text-sm text-foreground/70 hover:text-foreground transition-colors">Get Started</Link>
-                  <Link to="/signin" className="block text-sm text-foreground/70 hover:text-foreground transition-colors">Sign In</Link>
-                </div>
-              </div>
-              <div className="space-y-3">
-                <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Built with</p>
-                <div className="space-y-2">
-                  <span className="block text-sm text-foreground/70">React + TypeScript</span>
-                  <span className="block text-sm text-foreground/70">Tailwind CSS</span>
-                  <span className="block text-sm text-foreground/70">Zustand</span>
-                </div>
-              </div>
+            <div className="flex items-center gap-6 text-sm">
+              <Link to="/signup" className="text-foreground/70 hover:text-foreground transition-colors">Get Started</Link>
+              <Link to="/signin" className="text-foreground/70 hover:text-foreground transition-colors">Sign In</Link>
             </div>
           </div>
-          <div className="mt-10 pt-6 border-t border-border/40 flex flex-col sm:flex-row items-center justify-between gap-2">
+          <div className="mt-6 pt-6 border-t border-border/40 text-center">
             <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} RoomPulse. All rights reserved.</p>
-            <p className="text-xs text-muted-foreground">Designed & engineered with care.</p>
           </div>
         </div>
       </footer>

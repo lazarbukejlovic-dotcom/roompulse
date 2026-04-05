@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Zap, Columns3, CheckCircle2, Shield } from 'lucide-react';
+import { Zap, Activity, ShieldAlert, Columns3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -25,7 +25,7 @@ export default function SignIn() {
 
   return (
     <div className="flex min-h-screen bg-background">
-      {/* Left panel - branding */}
+      {/* Left panel */}
       <div className="hidden lg:flex lg:w-1/2 flex-col justify-between bg-primary/5 border-r border-border/40 p-12">
         <Link to="/" className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary shadow-lg shadow-primary/20">
@@ -34,13 +34,13 @@ export default function SignIn() {
           <span className="text-lg font-bold">RoomPulse</span>
         </Link>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.6 }}>
-          <h2 className="text-3xl font-extrabold tracking-tight mb-4">Where teams build<br /><span className="gradient-text">momentum.</span></h2>
-          <p className="text-muted-foreground text-sm leading-relaxed max-w-sm mb-8">Track tasks, visualize progress, and hit every deadline — beautifully.</p>
+          <h2 className="text-3xl font-extrabold tracking-tight mb-4">Keep your team's<br /><span className="gradient-text">work moving.</span></h2>
+          <p className="text-muted-foreground text-sm leading-relaxed max-w-sm mb-8">See what's shipping, what's stuck, and who owns what — at a glance.</p>
           <div className="space-y-4">
             {[
-              { icon: Columns3, text: 'Visual Kanban boards with drag-and-drop' },
-              { icon: CheckCircle2, text: 'Smart task tracking with priorities' },
-              { icon: Shield, text: 'Secure authentication & protected routes' },
+              { icon: Columns3, text: 'Visual workflow boards with drag-and-drop' },
+              { icon: ShieldAlert, text: 'Surface blockers before they delay delivery' },
+              { icon: Activity, text: 'Track execution progress across your team' },
             ].map((item) => (
               <div key={item.text} className="flex items-center gap-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
@@ -54,7 +54,7 @@ export default function SignIn() {
         <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} RoomPulse. All rights reserved.</p>
       </div>
 
-      {/* Right panel - form */}
+      {/* Right panel */}
       <div className="flex flex-1 items-center justify-center px-4 sm:px-8">
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-sm space-y-6">
           <div className="text-center lg:text-left">

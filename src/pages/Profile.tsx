@@ -25,7 +25,7 @@ export default function Profile() {
   if (!user) return null;
 
   const profileStats = [
-    { label: 'Boards', value: boards.length, icon: Columns3, color: 'text-primary', bg: 'bg-primary/10' },
+    { label: 'Workflows', value: boards.length, icon: Columns3, color: 'text-primary', bg: 'bg-primary/10' },
     { label: 'Tasks', value: tasks.length, icon: CheckCircle2, color: 'text-status-progress', bg: 'bg-status-progress/10' },
     { label: 'Comments', value: comments.length, icon: MessageSquare, color: 'text-accent', bg: 'bg-accent/10' },
   ];
@@ -34,10 +34,9 @@ export default function Profile() {
     <div className="p-4 lg:p-8 max-w-2xl mx-auto space-y-6">
       <motion.div initial="hidden" animate="visible" variants={fadeIn}>
         <h1 className="text-2xl font-extrabold tracking-tight">Profile</h1>
-        <p className="text-sm text-muted-foreground mt-1">Manage your account and see your workspace stats.</p>
+        <p className="text-sm text-muted-foreground mt-1">Your account and workspace activity.</p>
       </motion.div>
 
-      {/* Profile Card */}
       <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.1 }}>
         <Card className="glass-card overflow-hidden">
           <div className="h-20 bg-gradient-to-r from-primary/20 via-primary/10 to-accent/10" />
@@ -67,7 +66,6 @@ export default function Profile() {
         </Card>
       </motion.div>
 
-      {/* Edit Form */}
       <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.2 }}>
         <Card className="glass-card">
           <CardHeader>
