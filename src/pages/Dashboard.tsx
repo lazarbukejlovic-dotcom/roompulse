@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle2, Clock, AlertTriangle, Columns3, Activity, ArrowUpRight, TrendingUp, Plus, ShieldAlert, UserCircle, Target } from 'lucide-react';
+import { CheckCircle2, Clock, AlertTriangle, Columns3, Activity, ArrowUpRight, TrendingUp, Plus, ShieldAlert, UserCircle, Target, Users } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -14,23 +14,17 @@ const fadeIn = { hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } };
 const stagger = { visible: { transition: { staggerChildren: 0.05 } } };
 
 const STATUS_CHART_COLORS: Record<TaskStatus, string> = {
-  'todo': 'hsl(215, 15%, 46%)',
-  'in-progress': 'hsl(210, 80%, 55%)',
-  'review': 'hsl(270, 60%, 55%)',
-  'done': 'hsl(145, 65%, 42%)',
-};
-
-const DUE_URGENCY_STYLES = {
-  overdue: 'text-destructive bg-destructive/10',
-  soon: 'text-accent-foreground bg-accent/15',
-  normal: 'text-muted-foreground bg-secondary',
+  'todo': 'hsl(215, 14%, 44%)',
+  'in-progress': 'hsl(210, 78%, 52%)',
+  'review': 'hsl(270, 58%, 52%)',
+  'done': 'hsl(152, 60%, 38%)',
 };
 
 export default function Dashboard() {
   const { boards, tasks, comments, user } = useAppStore();
   const navigate = useNavigate();
 
-  const { statusCounts, completionRate, blockedTasks, overdueTasks, atRiskCount, todayFocus, upcoming } = useMemo(() => {
+  const { statusCounts, completionRate, blockedTasks, overdueTasks, atRiskCount, todayFocus, upcoming, workload } = useMemo(() => {
     const sc: Record<TaskStatus, number> = {
       'todo': tasks.filter(t => t.status === 'todo').length,
       'in-progress': tasks.filter(t => t.status === 'in-progress').length,
@@ -42,7 +36,6 @@ export default function Dashboard() {
     const overdue = tasks.filter(t => getDueUrgency(t.dueDate) === 'overdue' && t.status !== 'done');
     const risk = blocked.length + overdue.length;
 
-    // Today's focus: in-progress + due soon/today, not done
     const focus = tasks
       .filter(t => t.status !== 'done' && (t.status === 'in-progress' || getDueUrgency(t.dueDate) === 'soon' || getDueUrgency(t.dueDate) === 'overdue'))
       .sort((a, b) => {
@@ -61,7 +54,20 @@ export default function Dashboard() {
       .sort((a, b) => (a.dueDate! > b.dueDate! ? 1 : -1))
       .slice(0, 5);
 
-    return { statusCounts: sc, completionRate: cr, blockedTasks: blocked, overdueTasks: overdue, atRiskCount: risk, todayFocus: focus, upcoming: up };
+    // Team workload by assignee
+    const assigneeMap = new Map<string, { total: number; active: number; blocked: number }>();
+    tasks.filter(t => t.assignee && t.status !== 'done').forEach(t => {
+      const entry = assigneeMap.get(t.assignee!) ?? { total: 0, active: 0, blocked: 0 };
+      entry.total++;
+      if (t.status === 'in-progress') entry.active++;
+      if (t.blocked) entry.blocked++;
+      assigneeMap.set(t.assignee!, entry);
+    });
+    const wl = Array.from(assigneeMap.entries())
+      .map(([name, counts]) => ({ name, ...counts }))
+      .sort((a, b) => b.total - a.total);
+
+    return { statusCounts: sc, completionRate: cr, blockedTasks: blocked, overdueTasks: overdue, atRiskCount: risk, todayFocus: focus, upcoming: up, workload: wl };
   }, [tasks]);
 
   const stats = [
@@ -115,14 +121,14 @@ export default function Dashboard() {
         ))}
       </motion.div>
 
-      {/* Today's Focus — signature section */}
+      {/* Today's Focus */}
       {todayFocus.length > 0 && (
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.1 }}>
           <Card className="glass-card border-primary/10">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm flex items-center gap-2">
                 <Target className="h-4 w-4 text-primary" /> Today's Focus
-                <span className="text-[10px] font-normal text-muted-foreground ml-1">— what needs your attention right now</span>
+                <span className="text-[10px] font-normal text-muted-foreground ml-1">— needs attention now</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -165,7 +171,6 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-5">
-                {/* Simple ring instead of recharts — much lighter on mobile */}
                 <div className="relative w-24 h-24 flex-shrink-0">
                   <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
                     <circle cx="50" cy="50" r="40" fill="none" stroke="hsl(var(--muted))" strokeWidth="8" />
@@ -211,7 +216,7 @@ export default function Dashboard() {
                 <div className="flex flex-col items-center py-6 text-center">
                   <Columns3 className="h-8 w-8 text-muted-foreground/30 mb-2" />
                   <p className="text-xs font-medium">No workflows yet</p>
-                  <p className="text-[11px] text-muted-foreground mt-0.5">Create a workflow to start tracking your team's execution.</p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">Create a workflow to start tracking execution.</p>
                   <Link to="/boards">
                     <Button size="sm" variant="outline" className="mt-3 gap-1.5 text-xs"><Plus className="h-3 w-3" /> New Workflow</Button>
                   </Link>
@@ -244,10 +249,10 @@ export default function Dashboard() {
         </motion.div>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid gap-5 lg:grid-cols-3">
         {/* Blocked & At Risk */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.25 }}>
-          <Card className="glass-card">
+          <Card className="glass-card h-full">
             <CardHeader className="pb-3"><CardTitle className="text-sm flex items-center gap-2"><ShieldAlert className="h-4 w-4 text-destructive" /> Blocked & At Risk</CardTitle></CardHeader>
             <CardContent>
               {blockedTasks.length === 0 && overdueTasks.length === 0 ? (
@@ -264,22 +269,15 @@ export default function Dashboard() {
                       <div className="min-w-0 flex-1">
                         <p className="text-xs font-medium truncate">{t.title}</p>
                         {t.blockedReason && <p className="text-[11px] text-destructive/80 mt-0.5">{t.blockedReason}</p>}
-                        <div className="flex items-center gap-2 mt-0.5">
-                          <span className="text-[10px] text-muted-foreground">{boards.find(b => b.id === t.boardId)?.title}</span>
-                          {t.assignee && <span className="text-[10px] text-muted-foreground flex items-center gap-0.5"><UserCircle className="h-2.5 w-2.5" />{t.assignee}</span>}
-                        </div>
+                        <span className="text-[10px] text-muted-foreground">{boards.find(b => b.id === t.boardId)?.title}</span>
                       </div>
-                      <Badge variant="outline" className="text-[9px] font-semibold border-destructive/20 text-destructive flex-shrink-0">Blocked</Badge>
                     </div>
                   ))}
                   {overdueTasks.filter(t => !t.blocked).map((t) => (
                     <div key={t.id} className="flex items-center justify-between rounded-lg bg-destructive/[0.03] border border-destructive/10 px-3 py-2">
                       <div className="min-w-0">
                         <p className="text-xs font-medium truncate">{t.title}</p>
-                        <div className="flex items-center gap-2 mt-0.5">
-                          <span className="text-[10px] text-muted-foreground">{boards.find(b => b.id === t.boardId)?.title}</span>
-                          {t.assignee && <span className="text-[10px] text-muted-foreground flex items-center gap-0.5"><UserCircle className="h-2.5 w-2.5" />{t.assignee}</span>}
-                        </div>
+                        <span className="text-[10px] text-muted-foreground">{boards.find(b => b.id === t.boardId)?.title}</span>
                       </div>
                       <Badge variant="outline" className="text-[9px] font-semibold border-destructive/20 text-destructive flex-shrink-0">Overdue</Badge>
                     </div>
@@ -290,9 +288,45 @@ export default function Dashboard() {
           </Card>
         </motion.div>
 
-        {/* Delivery Timeline */}
+        {/* Team Workload — operational differentiator */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.3 }}>
-          <Card className="glass-card">
+          <Card className="glass-card h-full">
+            <CardHeader className="pb-3"><CardTitle className="text-sm flex items-center gap-2"><Users className="h-4 w-4 text-primary" /> Team Workload</CardTitle></CardHeader>
+            <CardContent>
+              {workload.length === 0 ? (
+                <div className="flex flex-col items-center py-6 text-center">
+                  <Users className="h-8 w-8 text-muted-foreground/30 mb-2" />
+                  <p className="text-xs font-medium">No active assignments</p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">Assign tasks to see workload distribution.</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {workload.map((w) => (
+                    <div key={w.name} className="flex items-center gap-3">
+                      <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-[9px] font-bold text-primary flex-shrink-0">
+                        {w.name.split(' ').map(n => n[0]).join('')}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-medium truncate">{w.name}</span>
+                          <span className="text-[10px] text-muted-foreground tabular-nums">{w.total} open</span>
+                        </div>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          {w.active > 0 && <span className="text-[9px] text-status-progress">{w.active} active</span>}
+                          {w.blocked > 0 && <span className="text-[9px] text-destructive font-semibold">{w.blocked} blocked</span>}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Delivery Timeline */}
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.35 }}>
+          <Card className="glass-card h-full">
             <CardHeader className="pb-3"><CardTitle className="text-sm flex items-center gap-2"><Clock className="h-4 w-4 text-accent" /> Delivery Timeline</CardTitle></CardHeader>
             <CardContent>
               {upcoming.length === 0 ? (
@@ -306,19 +340,18 @@ export default function Dashboard() {
                   {upcoming.map((t) => {
                     const urgency = getDueUrgency(t.dueDate);
                     return (
-                      <div key={t.id} className={`flex items-center justify-between rounded-lg px-3 py-2 transition-colors ${
+                      <div key={t.id} className={`flex items-center justify-between rounded-lg px-3 py-2 ${
                         urgency === 'overdue' ? 'bg-destructive/5 border border-destructive/15' : 'bg-secondary/40'
                       }`}>
                         <div className="min-w-0">
                           <p className="text-xs font-medium truncate">{t.title}</p>
-                          <div className="flex items-center gap-2 mt-0.5">
-                            <p className="text-[10px] text-muted-foreground">{boards.find(b => b.id === t.boardId)?.title}</p>
-                            {t.assignee && <span className="text-[10px] text-muted-foreground flex items-center gap-0.5"><UserCircle className="h-2.5 w-2.5" />{t.assignee}</span>}
-                          </div>
+                          <span className="text-[10px] text-muted-foreground">{boards.find(b => b.id === t.boardId)?.title}</span>
                         </div>
                         <div className="flex items-center gap-1.5 flex-shrink-0">
                           <Badge variant="outline" className="text-[9px] font-semibold">{PRIORITY_LABELS[t.priority]}</Badge>
-                          <span className={`text-[10px] font-medium rounded-md px-1.5 py-0.5 ${DUE_URGENCY_STYLES[urgency]}`}>
+                          <span className={`text-[10px] font-medium rounded-md px-1.5 py-0.5 ${
+                            urgency === 'overdue' ? 'text-destructive bg-destructive/10' : urgency === 'soon' ? 'text-accent-foreground bg-accent/10' : 'text-muted-foreground bg-secondary'
+                          }`}>
                             {urgency === 'overdue' ? 'Overdue' : formatDueDate(t.dueDate)}
                           </span>
                         </div>
@@ -333,15 +366,15 @@ export default function Dashboard() {
       </div>
 
       {/* Team Activity */}
-      <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.35 }}>
+      <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.4 }}>
         <Card className="glass-card">
-          <CardHeader className="pb-3"><CardTitle className="text-sm flex items-center gap-2"><Activity className="h-4 w-4 text-primary" /> Team Activity</CardTitle></CardHeader>
+          <CardHeader className="pb-3"><CardTitle className="text-sm flex items-center gap-2"><Activity className="h-4 w-4 text-primary" /> Recent Activity</CardTitle></CardHeader>
           <CardContent>
             {comments.length === 0 ? (
               <div className="flex flex-col items-center py-6 text-center">
                 <Activity className="h-8 w-8 text-muted-foreground/30 mb-2" />
                 <p className="text-xs font-medium">No activity yet</p>
-                <p className="text-[11px] text-muted-foreground mt-0.5">Comments and task updates will appear here as your team works.</p>
+                <p className="text-[11px] text-muted-foreground mt-0.5">Comments and updates will appear here as your team works.</p>
               </div>
             ) : (
               <div className="space-y-2">

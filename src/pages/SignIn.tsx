@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Zap, Activity, ShieldAlert, Columns3 } from 'lucide-react';
+import { Activity, ShieldAlert, Columns3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -29,7 +29,7 @@ export default function SignIn() {
       <div className="hidden lg:flex lg:w-1/2 flex-col justify-between bg-primary/5 border-r border-border/40 p-12">
         <Link to="/" className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary shadow-lg shadow-primary/20">
-            <Zap className="h-4 w-4 text-primary-foreground" />
+             <Activity className="h-4 w-4 text-primary-foreground" />
           </div>
           <span className="text-lg font-bold">RoomPulse</span>
         </Link>
@@ -59,7 +59,7 @@ export default function SignIn() {
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-sm space-y-6">
           <div className="text-center lg:text-left">
             <Link to="/" className="inline-flex items-center gap-2 mb-6 lg:hidden">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary"><Zap className="h-4 w-4 text-primary-foreground" /></div>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary"><Activity className="h-4 w-4 text-primary-foreground" /></div>
               <span className="text-lg font-bold">RoomPulse</span>
             </Link>
             <h1 className="text-2xl font-extrabold tracking-tight">Welcome back</h1>
