@@ -83,10 +83,10 @@ With RoomPulse, the goal was to show:
 ![RoomPulse Dashboard Overview](./01-dashboard-overview.png)
 
 ### Workflow Board
-![RoomPulse Workflow Board](./screenshots/02-workflow-board.png)
+![RoomPulse Workflow Board](./02-workflow-board.png)
 
 ### Analytics & Progress
-![RoomPulse Analytics and Progress](./screenshots/03-analytics-progress.png)
+![RoomPulse Analytics and Progress](./03-analytics-progress.png)
 
 ## Live Demo
 
