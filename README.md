@@ -80,7 +80,7 @@ With RoomPulse, the goal was to show:
 ## Screenshots
 
 ### Dashboard Overview
-![RoomPulse Dashboard Overview](./screenshots/01-dashboard-overview.png)
+![RoomPulse Dashboard Overview](./01-dashboard-overview.png)
 
 ### Workflow Board
 ![RoomPulse Workflow Board](./screenshots/02-workflow-board.png)
