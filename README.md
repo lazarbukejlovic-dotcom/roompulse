@@ -77,12 +77,16 @@ With RoomPulse, the goal was to show:
 
 ## Screenshots
 
-Add your final screenshots here.
+## Screenshots
 
-![RoomPulse Dashboard](./screenshots/roompulse-dashboard.png)
-![RoomPulse Workflow](./screenshots/roompulse-workflow.png)
-![RoomPulse Activity](./screenshots/roompulse-activity.png)
-![RoomPulse Mobile](./screenshots/roompulse-mobile.png)
+### Dashboard Overview
+![RoomPulse Dashboard Overview](./screenshots/01-dashboard-overview.png)
+
+### Workflow Board
+![RoomPulse Workflow Board](./screenshots/02-workflow-board.png)
+
+### Analytics & Progress
+![RoomPulse Analytics and Progress](./screenshots/03-analytics-progress.png)
 
 ## Live Demo
 
